@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link
+          rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/modern-normalize/2.0.0/modern-normalize.min.css"
+          integrity="sha512-4xo8blKMVCiXpTaLzQSLSw3KFOVPWhm/TRtuPVc4WG6kUgjH6J03IBuG7JZPkcWMxJ5huwaBpOpnwYElP/m6wg=="
+          crossorigin="anonymous"
+          referrerpolicy="no-referrer"
+  />
+  <link
+          rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+          integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+          crossorigin="anonymous"
+          referrerpolicy="no-referrer"
+  />
+  <link rel="stylesheet" th:href="@{/css/style.css}" />
+  <title>GOOD JOBS | 구인구직 플랫폼</title>
+</head>
+<body>
+<div id="header-container">
+  <div class="header-row sp-between resolution-65">
+    <div class="row">
+      <a href=""><img th:src="@{/assets/main-logo.png}" alt="굿잡스 로고" /></a>
+      <div class="ml-2" id="search-container">
+        <form action="">
+          <div class="row">
+            <div class="w-100">
+              <input
+                      type="text"
+                      id="searchInput"
+                      class="w-100"
+                      placeholder="회사명, 직종 등 검색어를 입력해주세요."
+              />
+            </div>
+            <div>
+              <label for="searchInput" id="searchButton">
+                <i class="fa-solid fa-magnifying-glass vh-center"></i>
+              </label>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div>
+      <a href="" class="grey">로그인</a
+      ><a href="" class="ml-1 grey">회원가입</a>
+    </div>
+  </div>
+  <div class="header-row resolution-65">
+    <a href="" id="first-menu">채용정보</a>
+    <div class="drop-btn">
+      <button type="button" class="menu subnav-btn">회원서비스</button>
+      <div class="subnav-content">
+        <div class="resolution-65 flex">
+          <div class="w-25">
+            <h1>개인 서비스(개발중)</h1>
+            <div><a href="">이력서 작성</a></div>
+            <div><a href="">이력서 관리</a></div>
+            <div><a href="">지원내역</a></div>
+          </div>
+          <div class="w-25">
+            <h1>기업 서비스</h1>
+            <div><a href="">공고등록</a></div>
+            <div><a href="">공고관리</a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="drop-btn">
+      <button type="button" class="menu subnav-btn">개인서비스</button>
+      <div class="subnav-content">
+        <div class="resolution-65 flex">
+          <div class="w-25">
+            <h1>개인 서비스(개발중)</h1>
+            <div><a href="">이력서 작성</a></div>
+            <div><a href="">이력서 관리</a></div>
+            <div><a href="">지원내역</a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="drop-btn">
+      <button type="button" class="menu subnav-btn">기업서비스</button>
+      <div class="subnav-content">
+        <div class="resolution-65 flex">
+          <div class="w-25">
+            <h1>기업 서비스</h1>
+            <div><a href="">공고등록</a></div>
+            <div><a href="">공고관리</a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="drop-cover"></div>
+  </div>
+</div>
+<div id="section-container">
+  <div class="resolution-65 pt-2">
+    <div layout:fragment="content">
+
+    </div>
+  </div>
+</div>
+
+<script th:src="@{/js/scripts.js}"></script>
+
+<th:block layout:fragment="script">
+
+</th:block>
+</body>
+</html>

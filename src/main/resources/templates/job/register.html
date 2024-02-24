@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/index.html}" xmlns="http://www.w3.org/1999/html">
+<head>
+  <script src="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.2/dist/quill.js"></script>
+  <link
+          href="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.2/dist/quill.snow.css"
+          rel="stylesheet"
+  />
+  <title>GOOD JOBS | 채용공고 등록</title>
+</head>
+<div layout:fragment="content">
+  <h1>채용공고 등록하기</h1>
+  <form id="registerForm" action="/job/register" method="post">
+    <div
+            id="companyInfoBox"
+            class="row px-3 py-2 grey-border mb-3 sp-evenly"
+    >
+      <div class="logo-box relative vh-center">
+        <img
+                id="logo-thumbnail"
+                th:src="@{/assets/logo-default.png}"
+                alt="회사 로고 이미지"
+        />
+        <label for="logo" id="camera-box">
+          <input type="file" id="logo" />
+          <i class="fa-solid fa-camera"></i
+          ></label>
+      </div>
+      <div class="info-box pl-3 flex-w sp-between w-75">
+        <div class="bold large mb-half"><span >회사명</span></div>
+        <input
+                type="hidden"
+                id="companyName"
+                name="companyName"
+
+        />
+        <div class="mb-1"><span class="error-msg writer companyName"></span></div>
+        <input type="hidden" id="writer" name="writer" />
+        <div>
+          <div class="row my-1">
+                  <span class="bold large">주소</span
+                  ><span class="red-star">*</span
+          ><button type="button" id="addressBtn" class="ml-1">
+            검색
+          </button>
+          </div>
+          <div>
+            <label for="roadAddress" class="hidden-label"
+            >도로명주소</label
+            ><input
+                  type="text"
+                  id="roadAddress"
+                  placeholder="도로명주소"
+                  class="input-default w-100"
+          />
+          </div>
+          <div>
+            <label for="detailAddress" class="hidden-label"
+            >상세주소</label
+            ><input
+                  type="text"
+                  id="detailAddress"
+                  placeholder="상세주소"
+                  class="input-default w-100"
+          />
+          </div>
+          <input type="hidden" id="address" name="address" />
+          <div><span class="error-msg address"></span></div>
+        </div>
+      </div>
+    </div><!-- end of company info box -->
+    <div id="title-box" class="mb-3 faint-border-bottom pb-1">
+      <div class="mb-1 py-1 border-bottom row">
+              <span class="larger bold">제목</span
+              ><span class="red-star">*</span
+      ><span class="ml-1 small"
+      >최대 30자까지 입력할 수 있습니다.</span
+      ><span id="titleCnt" class="ml-1 small">( 30 / 30 )</span>
+      </div>
+      <div class="mx-1">
+        <label for="title" class="hidden-label">제목</label
+        ><input
+              type="text"
+              id="title"
+              name="title"
+              class="input-default w-100"
+              placeholder="제목을 입력해주세요."
+      />
+      </div>
+      <div class="mx-1"><span class="error-msg title"></span></div>
+    </div><!-- end of title box -->
+    <div class="mb-3 faint-border-bottom">
+      <div class="mb-1 py-1 border-bottom row">
+        <span class="larger bold">채용조건</span>
+      </div>
+      <div class="row mx-1 mb-1">
+        <div class="w-20">
+                <span class="bold medium-large">경력</span
+                ><span class="red-star">*</span
+        ><input type="hidden" id="exp" name="exp" />
+        </div>
+        <div class="w-80">
+          <div class="row mb-half">
+            <div>
+                    <span id="newbieBtn" class="temp-border px-3 py-half"
+                    >신입</span
+                    >
+            </div>
+            <div>
+                    <span id="expBtn" class="temp-border px-3 py-half"
+                    >경력</span
+                    >
+            </div>
+            <div id="expYear-box" class="ml-2">
+              <label for="expYear" class="hidden-label">경력 년수</label
+              ><input
+                    type="text"
+                    id="expYear"
+                    name="expYear"
+                    class="grey-border"
+            /><span class="ml-half small">년 이상</span>
+            </div>
+          </div>
+          <div class="error-box mb-1"><span class="error-msg exp expYear"></span></div>
+        </div>
+      </div><!-- end of 경력 -->
+      <div class="row mx-1 mb-1">
+        <div class="w-20">
+                <span class="bold medium-large">최종학력</span
+                ><span class="red-star">*</span
+        ><input type="hidden" id="edu" name="edu" />
+        </div>
+        <div class="w-80">
+          <div class="row mb-half">
+            <div id="edu-box" class="relative">
+              <div class="row">
+                      <span
+                              id="eduBtn"
+                              class="pl-half grey-border w-100 py-half"
+                      >선택</span
+                      >
+                <i class="fa-solid fa-caret-down" id="eduDropdownBtn"></i>
+              </div>
+              <div id="edu-option-box" class="py-half grey-border">
+                <ul class="px-half">
+                  <li>학력무관</li>
+                  <li>고등학교 졸업</li>
+                  <li>대학(2,3년제) 졸업</li>
+                  <li>대학(4년제) 졸업</li>
+                  <li>석사 학위</li>
+                  <li>박사 학위</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="error-box mb-1"><span class="error-msg edu"></span></div>
+        </div>
+      </div><!-- end of 최종학력 -->
+      <div class="row mx-1 mb-1">
+        <div class="w-20">
+          <span class="bold medium-large">마감일</span
+          ><span class="red-star">*</span>
+          <input type="hidden" id="deadline" name="deadline"/>
+        </div>
+        <div class="w-80">
+          <div class="row mb-half">
+            <div class="row">
+              <div id="deadline-setting" class="row">
+                <div class="row mr-1">
+                  <div class="deadline-box relative mr-quarter">
+                    <div class="row">
+                            <span
+                                    id="year"
+                                    class="pl-half grey-border w-100 py-half"
+                            >2024</span
+                            ><i class="fa-solid fa-caret-down"></i>
+                    </div>
+                    <div class="deadline-option-box py-half grey-border">
+                      <ul class="px-half">
+                        <li>2024</li>
+                        <li>2025</li>
+                        <li>2026</li>
+                      </ul>
+                    </div>
+                  </div>
+                  <span>년</span>
+                </div><!-- end of 년도 -->
+                <div class="row mr-1">
+                  <div class="deadline-box relative mr-quarter">
+                    <div class="row">
+                            <span
+                                    id="month"
+                                    class="pl-half grey-border w-100 py-half"
+                            >1</span
+                            ><i class="fa-solid fa-caret-down"></i>
+                    </div>
+                    <div class="deadline-option-box py-half grey-border">
+                      <ul class="px-half">
+                        <li>1</li>
+                        <li>2</li>
+                        <li>3</li>
+                        <li>3</li>
+                        <li>3</li>
+                        <li>3</li>
+                        <li>3</li>
+                        <li>3</li>
+                        <li>3</li>
+                        <li>3</li>
+                        <li>3</li>
+                        <li>12</li>
+                      </ul>
+                    </div>
+                  </div>
+                  <span>월</span>
+                </div><!-- end of 월 -->
+                <div class="row mr-3">
+                  <div class="deadline-box relative mr-quarter">
+                    <div class="row">
+                            <span
+                                    id="date"
+                                    class="pl-half grey-border w-100 py-half"
+                            >1</span
+                            ><i class="fa-solid fa-caret-down"></i>
+                    </div>
+                    <div class="deadline-option-box py-half grey-border">
+                      <ul class="px-half">
+                        <li>1</li>
+                        <li>2</li>
+                        <li>3</li>
+                        <li>31</li>
+                        <li>3</li>
+                        <li>31</li>
+                        <li>3</li>
+                        <li>3</li>
+                        <li>3</li>
+                        <li>3</li>
+                        <li>3</li>
+                        <li>12</li>
+                      </ul>
+                    </div>
+                  </div>
+                  <span>일</span>
+                </div><!-- end of 일 -->
+                <div class="row mr-1">
+                  <div class="deadline-box relative mr-quarter">
+                    <div class="row">
+                            <span
+                                    id="hour"
+                                    class="pl-half grey-border w-100 py-half"
+                            >18</span
+                            ><i class="fa-solid fa-caret-down"></i>
+                    </div>
+                    <div class="deadline-option-box py-half grey-border">
+                      <ul class="px-half">
+                        <li>1</li>
+                        <li>2</li>
+                        <li>3</li>
+                        <li>31</li>
+                        <li>3</li>
+                        <li>31</li>
+                        <li>3</li>
+                        <li>3</li>
+                        <li>3</li>
+                        <li>3</li>
+                        <li>3</li>
+                        <li>12</li>
+                      </ul>
+                    </div>
+                  </div>
+                  <span>시</span>
+                </div><!-- end of 시 -->
+                <div class="row mr-2 ">
+                  <div class="deadline-box relative mr-quarter">
+                    <div class="row">
+                            <span
+                                    id="minute"
+                                    class="pl-half grey-border w-100 py-half"
+                            >0</span
+                            ><i class="fa-solid fa-caret-down"></i>
+                    </div>
+                    <div class="deadline-option-box py-half grey-border">
+                      <ul class="px-half">
+                        <li>1</li>
+                        <li>2</li>
+                        <li>3</li>
+                        <li>31</li>
+                        <li>3</li>
+                        <li>31</li>
+                        <li>3</li>
+                        <li>3</li>
+                        <li>3</li>
+                        <li>3</li>
+                        <li>3</li>
+                        <li>12</li>
+                      </ul>
+                    </div>
+                  </div>
+                  <span>분</span>
+                </div><!-- end of 분 -->
+              </div>
+              <div>
+                <input
+                        type="checkbox"
+                        id="isEndless"
+                /><label for="isEndless" class="ml-quarter"
+              >상시모집</label
+              >
+              </div>
+            </div>
+          </div>
+          <div class="error-box"><span class="error-msg deadline"></span></div>
+        </div>
+      </div><!-- end of 마감일 -->
+    </div><!-- end of 채용조건 -->
+    <div id="location-box" class="mb-3 faint-border-bottom pb-1">
+      <div class="mb-1 py-1 border-bottom row">
+              <span class="larger bold">근무지역</span
+              ><span class="red-star">*</span
+      ><span class="ml-1 small">최대 10개의 지역을 선택할 수 있습니다.</span
+      >
+      </div>
+      <div class="mx-1">
+        <div id="location-table" class="mb-half">
+          <div class="row text-center">
+            <div class="w-30 py-half"><span>시·도</span></div>
+            <div class="w-70 py-half"><span>시·군·구</span></div>
+          </div><!-- end of 1행 -->
+          <div class="row">
+            <div class="w-30 row px-1 py-half">
+              <div class="w-50"><span>지역1</span></div>
+              <div class="w-50"><span>지역2</span></div>
+              <div class="w-50"><span>지역1</span></div>
+              <div class="w-50"><span>지역2</span></div>
+              <div class="w-50"><span>지역1</span></div>
+              <div class="w-50"><span>지역2</span></div>
+              <div class="w-50"><span>지역2</span></div>
+              <div class="w-50"><span>지역1</span></div>
+              <div class="w-50"><span>지역2</span></div>
+              <div class="w-50"><span>지역1</span></div>
+              <div class="w-50"><span>지역1</span></div>
+              <div class="w-50"><span>지역2</span></div>
+              <div class="w-50"><span>지역1</span></div>
+              <div class="w-50"><span>지역2</span></div>
+            </div>
+            <div class="w-70 row px-1 py-half">
+              <div class="w-25">
+                <span>지역1</span>
+              </div>
+              <div class="w-25"><span>지역2</span></div>
+              <div class="w-25"><span>지역3</span></div>
+              <div class="w-25"><span>지역1</span></div>
+              <div class="w-25"><span>지역2</span></div>
+              <div class="w-25"><span>지역1</span></div>
+              <div class="w-25"><span>지역3</span></div>
+              <div class="w-25"><span>지역3</span></div>
+              <div class="w-25"><span>지역3</span></div>
+              <div class="w-25"><span>지역1</span></div>
+              <div class="w-25"><span>지역3</span></div>
+              <div class="w-25"><span>지역1</span></div>
+              <div class="w-25"><span>지역2</span></div>
+              <div class="w-25"><span>지역3</span></div>
+              <div class="w-25"><span>지역3</span></div>
+              <div class="w-25"><span>지역1</span></div>
+              <div class="w-25"><span>지역3</span></div>
+              <div class="w-25"><span>지역1</span></div>
+              <div class="w-25"><span>지역2</span></div>
+              <div class="w-25"><span>지역3</span></div>
+            </div>
+          </div><!-- end of 2행 -->
+          <div class="row px-1 pt-1">
+            <span>선택 지역 1<i class="fa-solid fa-xmark"></i></span>
+            <span>선택 지역 1</span>
+            <span>선택 지역 1</span>
+            <span>선택 지역 1</span>
+            <span>선택 지역 1</span>
+            <span>선택 지역 1</span>
+            <span>선택 지역 1</span>
+            <span>선택 지역 1</span><span>선택 지역 1</span>
+            <span>선택 지역 1</span>
+            <span>선택 지역 1</span><span>선택 지역 1</span>
+            <span>선택 지역 1</span><span>선택 지역 1</span>
+            <span>선택 지역 1</span>
+            <span>선택 지역 1</span>
+            <span>선택 지역 1</span>
+            <span>선택 지역 1</span>
+            <span>선택 지역 1</span>
+            <span>선택 지역 1</span>
+          </div><!-- end of 3행 -->
+          <div id="resetBtn" class="row px-1 pb-1">
+            <span id="locationCnt" class="ml-1 small mr-1"> 10 / 10 </span>
+                  <span class="grey-border px-1 py-half"
+                  ><i class="fa-solid fa-arrow-rotate-left"></i>초기화</span
+                  >
+          </div><!-- end of 4행 -->
+          <div id="location-list">
+            <input type="hidden" name="">
+          </div>
+        </div>
+      </div>
+      <div class="mx-1"><span class="error-msg"></span></div>
+    </div><!-- end of 근무지역 -->
+    <div class="mb-3 faint-border-bottom pb-1">
+      <div class="mb-1 py-1 border-bottom row">
+              <span class="larger bold">상세내용</span
+              ><span class="red-star">*</span>
+      </div>
+      <div class="mx-1">
+        <div id="editor" class="mb-half"></div>
+      </div>
+      <div class="mx-1">
+              <span class="error-msg"></span>
+      </div>
+    </div><!-- end of 상세내용 -->
+    <div class="row sp-center mt-5 mb-6">
+      <button
+              type="button"
+              class="py-1 w-15 mr-1 grey-border"
+              id="submitBtn"
+      >
+        등록하기</button
+      ><button
+            type="button"
+            class="py-1 w-15 ml-1 grey-border"
+            id="cancelBtn"
+    >
+      취소
+    </button>
+    </div>
+  </form>
+</div>
+<script layout:fragment="script" th:inline="javascript">
+
+  // 변수 선언
+  const registerForm = document.getElementById("registerForm")
+  const submitBtn = document.getElementById("submitBtn")
+  const errors = [[${errors}]]
+
+  // 상세내용 작성할 Quill text editor 불러오기
+  const quill = new Quill("#editor", {
+    modules: {
+      toolbar: [
+        [{ size: ["huge", "large", false, "small"] }],
+        ["bold", "italic"],
+        [{ list: "ordered" }, { list: "bullet" }],
+        [{ indent: "-1" }, { indent: "+1" }],
+        ["image"],
+      ],
+    },
+    theme: "snow",
+  });
+
+  // submitBtn 클릭시 채용공고가 서버로 전송된다.
+  submitBtn.addEventListener("click", function () {
+    registerForm.submit();
+  })
+
+  // 리다이렉트 된 에러 메시지를 errorBox에 삽입해 보여주거나 alert로 띄운다.
+  // bindingFailure 에러는 디폴트 에러 메시지가 영어이므로 수정한다.
+  console.log(errors)
+  if(errors) {
+    for (let i = 0; i < errors.length; i++) {
+      let field = errors[i]["field"];
+      let defaultMsg = errors[i]["defaultMessage"];
+      let errorBox = document.querySelector('.error-msg' + "." + field);
+
+      if(errors[i]["bindingFailure"]) {
+        defaultMsg = "올바른 값을 입력해주세요.";
+      }
+
+      if(errorBox !== null) {
+        let span = document.createElement('span');
+        span.innerHTML = defaultMsg;
+        errorBox.appendChild(span);
+      } else {
+        alert(defaultMsg);
+      }
+    }
+  }
+
+</script>
+</html>
