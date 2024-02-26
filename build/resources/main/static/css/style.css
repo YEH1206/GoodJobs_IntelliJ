@@ -5,7 +5,7 @@
 * {
     color: #171717;
     box-sizing: border-box;
-    overscroll-behavior-block: contain;
+    font-family: system-ui, "Font Awesome 6 Free";
 }
 
 html,
@@ -60,8 +60,18 @@ h1 {
     align-items: center;
 }
 
+.v-center {
+    display: flex;
+    align-items: center;
+}
+
+.h-center {
+    display: flex;
+    justify-content: center;
+}
+
 .hidden {
-    display: none;
+    display: none !important;
 }
 
 .row {
@@ -186,6 +196,10 @@ h1 {
     margin-right: 8px;
 }
 
+.mr-3quarter {
+    margin-right: 12px;
+}
+
 .mr-1 {
     margin-right: 16px;
 }
@@ -200,6 +214,10 @@ h1 {
 
 .mb-half {
     margin-bottom: 8px;
+}
+
+.mb-3quarter {
+    margin-bottom: 12px;
 }
 
 .mb-1 {
@@ -234,6 +252,10 @@ h1 {
     margin-left: 8px;
 }
 
+.ml-3quarter {
+    margin-left: 12px;
+}
+
 .ml-1 {
     margin-left: 16px;
 }
@@ -244,6 +266,21 @@ h1 {
 
 .ml-3 {
     margin-left: 48px;
+}
+
+.mx-quarter {
+    margin-left: 4px;
+    margin-right: 4px;
+}
+
+.mx-half {
+    margin-left: 8px;
+    margin-right: 8px;
+}
+
+.mx-3quarter {
+    margin-left: 12px;
+    margin-right: 12px;
 }
 
 .mx-1 {
@@ -310,6 +347,11 @@ h1 {
     padding-right: 8px;
 }
 
+.px-3quarter {
+    padding-left: 12px;
+    padding-right: 12px;
+}
+
 .px-1 {
     padding-left: 16px;
     padding-right: 16px;
@@ -371,10 +413,6 @@ h1 {
     border-radius: 8px;
 }
 
-.hidden-label {
-    display: none;
-}
-
 .red-star {
     color: red;
     font-weight: 700;
@@ -382,7 +420,7 @@ h1 {
 }
 
 .error-msg span {
-    padding: 2px 0;
+    padding-top: 12px;
     display: block;
     font-size: 0.875rem;
     color: #ff501b;
@@ -566,7 +604,6 @@ h1 {
     font-size: 1rem;
     padding: 0 8px;
     border-radius: 1.6rem;
-    background-color: white;
     color: white;
     font-weight: bold;
     background-color: #ff501b;
@@ -575,36 +612,37 @@ h1 {
 }
 
 .input-default {
-    margin-bottom: 12px;
     border: 1px solid #d2d2d2;
     padding: 8px 12px;
     border-radius: 8px;
 }
 
-#newbieBtn,
-#expBtn {
+.expBtn {
     display: inline-block;
     color: #6a6a6a;
     border: 1px solid #d2d2d2;
     cursor: pointer;
 }
 
-#newbieBtn:hover,
-#expBtn:hover {
-    color: #171717;
-    background-color: #ddd;
+.expBtn.clicked {
+    background-color: #ff501b;;
+    color: white;
     font-weight: bold;
 }
 
-#newbieBtn {
+#newbie {
     border-top-left-radius: 8px;
     border-bottom-left-radius: 8px;
     border-right: none;
 }
 
-#expBtn {
+#experienced {
     border-top-right-radius: 8px;
     border-bottom-right-radius: 8px;
+}
+
+#expYear-box {
+    display: none;
 }
 
 #expYear {
@@ -615,8 +653,9 @@ h1 {
 
 #eduBtn {
     font-size: 1rem;
-    color: #171717;
+    color: #6a6a6a;
     cursor: pointer;
+    padding-left: 12px;
 }
 
 #eduBtn:hover {
@@ -625,7 +664,7 @@ h1 {
 
 #eduDropdownBtn {
     position: absolute;
-    right: 8px;
+    right: 12px;
     z-index: -1;
     color: #333;
 }
@@ -634,16 +673,12 @@ h1 {
     width: 11rem;
 }
 
-#edu-box:hover #edu-option-box {
-    display: block;
-}
-
 #edu-option-box {
-    display: none;
+    display: block;
     position: absolute;
     width: 100%;
     background-color: white;
-    z-index: 1;
+    z-index: 2;
 }
 
 #edu-option-box li {
@@ -657,65 +692,30 @@ h1 {
     font-weight: bold;
 }
 
-.deadline-option-box {
-    display: none;
-    max-height: 100px;
-    overflow-y: auto;
+#local-date, #local-time {
+    border: 1px solid #d2d2d2;
+    border-radius: 8px;
 }
 
-.deadline-box:hover .deadline-option-box {
-    display: block;
-    position: absolute;
-    width: 100%;
-    background-color: white;
-    z-index: 1;
-}
-
-.deadline-box span {
-    padding-right: 8px;
-}
-
-.deadline-box i {
-    position: absolute;
-    right: 8px;
-    z-index: -1;
-}
-
-.deadline-box span {
-    font-size: 1rem;
-    color: #171717;
-    cursor: pointer;
-}
-
-.deadline-box:hover span {
-    border: 1px solid #171717;
-}
-
-.deadline-option-box {
-    max-height: 14rem;
-    overflow-y: auto;
-}
-
-.deadline-option-box li {
+#deadline-setting input {
     padding: 8px 0;
-    color: #6a6a6a;
-    cursor: pointer;
-}
-
-.deadline-option-box li:hover {
-    color: #171717;
-    font-weight: bold;
+    border: transparent;
+    text-align: center;
 }
 
 #year {
-    width: 5rem;
+    width: 3rem;
 }
 
-#month,
-#date,
-#hour,
-#minute {
-    width: 3.5rem;
+#month, #date, #hour, #minute {
+    width: 2rem;
+}
+
+#isEndless + label {
+    display: inline-block;
+    border: 1px solid transparent;
+    padding-top: 8px;
+    padding-bottom: 8px;
 }
 
 #location-table > * > div:first-child {
@@ -807,7 +807,6 @@ h1 {
     min-height: calc(100vh / 3);
     max-height: 100vh;
     overflow-y: auto;
-    overscroll-behavior: auto;
 }
 
 #submitBtn,

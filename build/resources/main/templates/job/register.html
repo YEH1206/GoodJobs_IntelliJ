@@ -1,94 +1,79 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/index.html}" xmlns="http://www.w3.org/1999/html">
+<html lang="ko" layout:decorate="~{layout/index.html}" xmlns="http://www.w3.org/1999/html"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org">
 <head>
+  <link href="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.2/dist/quill.snow.css" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.2/dist/quill.js"></script>
-  <link
-          href="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.2/dist/quill.snow.css"
-          rel="stylesheet"
-  />
+  <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
   <title>GOOD JOBS | 채용공고 등록</title>
 </head>
 <div layout:fragment="content">
   <h1>채용공고 등록하기</h1>
-  <form id="registerForm" action="/job/register" method="post">
-    <div
-            id="companyInfoBox"
-            class="row px-3 py-2 grey-border mb-3 sp-evenly"
-    >
+  <form action="/job/register" id="registerForm" method="post">
+    <div class="row px-3 py-2 grey-border mb-3 sp-evenly" id="companyInfoBox">
       <div class="logo-box relative vh-center">
-        <img
-                id="logo-thumbnail"
-                th:src="@{/assets/logo-default.png}"
-                alt="회사 로고 이미지"
-        />
-        <label for="logo" id="camera-box">
-          <input type="file" id="logo" />
-          <i class="fa-solid fa-camera"></i
-          ></label>
+        <img alt="회사 로고 이미지" id="logo-thumbnail" th:src="@{/assets/logo-default.png}"/>
+        <label for="logo" id="camera-box"><input id="logo" type="file"/><i class="fa-solid fa-camera"></i></label>
       </div>
-      <div class="info-box pl-3 flex-w sp-between w-75">
-        <div class="bold large mb-half"><span >회사명</span></div>
+      <div class="info-box pl-3 flex-col sp-between w-75">
+        <div class="bold large mb-half"><span>회사명</span></div>
         <input
-                type="hidden"
                 id="companyName"
                 name="companyName"
-
+                type="hidden"
+                value="회사명"
         />
-        <div class="mb-1"><span class="error-msg writer companyName"></span></div>
-        <input type="hidden" id="writer" name="writer" />
+        <div class="mb-1">
+          <div class="error-msg writer companyName"></div>
+        </div>
+        <input id="writer" name="writer" type="hidden" value="아이디"/>
         <div>
-          <div class="row my-1">
-                  <span class="bold large">주소</span
-                  ><span class="red-star">*</span
-          ><button type="button" id="addressBtn" class="ml-1">
-            검색
-          </button>
+          <div class="row mt-1 mb-3quarter">
+            <span class="bold large">주소</span><span class="red-star">*</span>
+            <button class="ml-1" id="addressBtn" type="button">검색</button>
           </div>
           <div>
-            <label for="roadAddress" class="hidden-label"
-            >도로명주소</label
-            ><input
-                  type="text"
+            <label class="hidden" for="roadAddress">도로명주소</label>
+            <input
+                  class="input-default mb-3quarter w-100 required"
                   id="roadAddress"
                   placeholder="도로명주소"
-                  class="input-default w-100"
-          />
+                  type="text"
+                  readonly
+            />
           </div>
           <div>
-            <label for="detailAddress" class="hidden-label"
-            >상세주소</label
-            ><input
-                  type="text"
+            <label class="hidden" for="detailAddress">상세주소</label>
+            <input
+                  class="input-default w-100"
                   id="detailAddress"
                   placeholder="상세주소"
-                  class="input-default w-100"
-          />
+                  type="text"
+            />
           </div>
-          <input type="hidden" id="address" name="address" />
-          <div><span class="error-msg address"></span></div>
+          <input id="address" name="address" type="hidden" class="required"/>
+          <div><div class="error-msg address roadAddress"></div></div>
         </div>
       </div>
     </div><!-- end of company info box -->
-    <div id="title-box" class="mb-3 faint-border-bottom pb-1">
+    <div class="mb-3 faint-border-bottom pb-1" id="title-box">
       <div class="mb-1 py-1 border-bottom row">
-              <span class="larger bold">제목</span
-              ><span class="red-star">*</span
-      ><span class="ml-1 small"
-      >최대 30자까지 입력할 수 있습니다.</span
-      ><span id="titleCnt" class="ml-1 small">( 30 / 30 )</span>
+        <span class="larger bold">제목</span>
+        <span class="red-star">*</span>
+        <span class="ml-1 small">최대 50자까지 입력할 수 있습니다.</span>
+        <span class="ml-1 small" id="titleCnt"></span>
       </div>
       <div class="mx-1">
-        <label for="title" class="hidden-label">제목</label
-        ><input
-              type="text"
+        <label class="hidden" for="title">제목</label>
+        <input
+              class="input-default w-100 required"
               id="title"
               name="title"
-              class="input-default w-100"
               placeholder="제목을 입력해주세요."
-      />
+              type="text"
+        />
       </div>
-      <div class="mx-1"><span class="error-msg title"></span></div>
+      <div class="mx-1"><div class="error-msg title"></div></div>
     </div><!-- end of title box -->
     <div class="mb-3 faint-border-bottom">
       <div class="mb-1 py-1 border-bottom row">
@@ -96,232 +81,110 @@
       </div>
       <div class="row mx-1 mb-1">
         <div class="w-20">
-                <span class="bold medium-large">경력</span
-                ><span class="red-star">*</span
-        ><input type="hidden" id="exp" name="exp" />
+          <span class="bold medium-large">경력</span>
+          <span class="red-star">*</span>
+          <input id="exp" name="exp" type="hidden" class="required" />
         </div>
         <div class="w-80">
-          <div class="row mb-half">
+          <div class="row">
             <div>
-                    <span id="newbieBtn" class="temp-border px-3 py-half"
-                    >신입</span
-                    >
+              <span class="temp-border px-3 py-half expBtn" id="newbie" data-num="0">신입</span>
             </div>
-            <div>
-                    <span id="expBtn" class="temp-border px-3 py-half"
-                    >경력</span
-                    >
-            </div>
-            <div id="expYear-box" class="ml-2">
-              <label for="expYear" class="hidden-label">경력 년수</label
-              ><input
-                    type="text"
-                    id="expYear"
-                    name="expYear"
-                    class="grey-border"
-            /><span class="ml-half small">년 이상</span>
+            <span class="temp-border px-3 py-half expBtn" id="experienced" data-num="1">경력</span>
+            <div class="ml-2" id="expYear-box">
+              <label class="hidden" for="expYear">경력 년수</label>
+              <input
+                      class="grey-border"
+                      id="expYear"
+                      name="expYear"
+                      type="text"
+                      placeholder="0"
+              />
+              <span class="ml-half small">년 이상</span>
             </div>
           </div>
-          <div class="error-box mb-1"><span class="error-msg exp expYear"></span></div>
+          <div><div class="error-msg exp expYear"></div></div>
         </div>
       </div><!-- end of 경력 -->
       <div class="row mx-1 mb-1">
         <div class="w-20">
-                <span class="bold medium-large">최종학력</span
-                ><span class="red-star">*</span
-        ><input type="hidden" id="edu" name="edu" />
+          <span class="bold medium-large">최종학력</span>
+          <span class="red-star">*</span>
+          <input id="edu" name="edu" type="hidden" class="required" />
         </div>
         <div class="w-80">
-          <div class="row mb-half">
-            <div id="edu-box" class="relative">
+          <div class="row ">
+            <div class="relative" id="edu-box">
               <div class="row">
-                      <span
-                              id="eduBtn"
-                              class="pl-half grey-border w-100 py-half"
-                      >선택</span
-                      >
+                <span class="grey-border w-100 py-half" id="eduBtn" >선택</span >
                 <i class="fa-solid fa-caret-down" id="eduDropdownBtn"></i>
               </div>
-              <div id="edu-option-box" class="py-half grey-border">
-                <ul class="px-half">
-                  <li>학력무관</li>
-                  <li>고등학교 졸업</li>
-                  <li>대학(2,3년제) 졸업</li>
-                  <li>대학(4년제) 졸업</li>
-                  <li>석사 학위</li>
-                  <li>박사 학위</li>
+              <div class="py-half grey-border hidden" id="edu-option-box">
+                <ul class="px-3quarter">
+                  <li class="edu-option" data-num="0">학력무관</li>
+                  <li class="edu-option" data-num="1">고등학교 졸업</li>
+                  <li class="edu-option" data-num="2">대학(2,3년제) 졸업</li>
+                  <li class="edu-option" data-num="3">대학(4년제) 졸업</li>
+                  <li class="edu-option" data-num="4">석사 학위</li>
+                  <li class="edu-option" data-num="5">박사 학위</li>
                 </ul>
               </div>
             </div>
           </div>
-          <div class="error-box mb-1"><span class="error-msg edu"></span></div>
+          <div><div class="error-msg edu"></div></div>
         </div>
       </div><!-- end of 최종학력 -->
       <div class="row mx-1 mb-1">
         <div class="w-20">
           <span class="bold medium-large">마감일</span
           ><span class="red-star">*</span>
-          <input type="hidden" id="deadline" name="deadline"/>
+          <input id="deadline" name="deadline" type="hidden"/>
         </div>
         <div class="w-80">
-          <div class="row mb-half">
+          <div class="row">
             <div class="row">
               <div id="deadline-setting" class="row">
-                <div class="row mr-1">
-                  <div class="deadline-box relative mr-quarter">
-                    <div class="row">
-                            <span
-                                    id="year"
-                                    class="pl-half grey-border w-100 py-half"
-                            >2024</span
-                            ><i class="fa-solid fa-caret-down"></i>
-                    </div>
-                    <div class="deadline-option-box py-half grey-border">
-                      <ul class="px-half">
-                        <li>2024</li>
-                        <li>2025</li>
-                        <li>2026</li>
-                      </ul>
-                    </div>
-                  </div>
-                  <span>년</span>
-                </div><!-- end of 년도 -->
-                <div class="row mr-1">
-                  <div class="deadline-box relative mr-quarter">
-                    <div class="row">
-                            <span
-                                    id="month"
-                                    class="pl-half grey-border w-100 py-half"
-                            >1</span
-                            ><i class="fa-solid fa-caret-down"></i>
-                    </div>
-                    <div class="deadline-option-box py-half grey-border">
-                      <ul class="px-half">
-                        <li>1</li>
-                        <li>2</li>
-                        <li>3</li>
-                        <li>3</li>
-                        <li>3</li>
-                        <li>3</li>
-                        <li>3</li>
-                        <li>3</li>
-                        <li>3</li>
-                        <li>3</li>
-                        <li>3</li>
-                        <li>12</li>
-                      </ul>
-                    </div>
-                  </div>
-                  <span>월</span>
-                </div><!-- end of 월 -->
-                <div class="row mr-3">
-                  <div class="deadline-box relative mr-quarter">
-                    <div class="row">
-                            <span
-                                    id="date"
-                                    class="pl-half grey-border w-100 py-half"
-                            >1</span
-                            ><i class="fa-solid fa-caret-down"></i>
-                    </div>
-                    <div class="deadline-option-box py-half grey-border">
-                      <ul class="px-half">
-                        <li>1</li>
-                        <li>2</li>
-                        <li>3</li>
-                        <li>31</li>
-                        <li>3</li>
-                        <li>31</li>
-                        <li>3</li>
-                        <li>3</li>
-                        <li>3</li>
-                        <li>3</li>
-                        <li>3</li>
-                        <li>12</li>
-                      </ul>
-                    </div>
-                  </div>
-                  <span>일</span>
-                </div><!-- end of 일 -->
-                <div class="row mr-1">
-                  <div class="deadline-box relative mr-quarter">
-                    <div class="row">
-                            <span
-                                    id="hour"
-                                    class="pl-half grey-border w-100 py-half"
-                            >18</span
-                            ><i class="fa-solid fa-caret-down"></i>
-                    </div>
-                    <div class="deadline-option-box py-half grey-border">
-                      <ul class="px-half">
-                        <li>1</li>
-                        <li>2</li>
-                        <li>3</li>
-                        <li>31</li>
-                        <li>3</li>
-                        <li>31</li>
-                        <li>3</li>
-                        <li>3</li>
-                        <li>3</li>
-                        <li>3</li>
-                        <li>3</li>
-                        <li>12</li>
-                      </ul>
-                    </div>
-                  </div>
-                  <span>시</span>
-                </div><!-- end of 시 -->
-                <div class="row mr-2 ">
-                  <div class="deadline-box relative mr-quarter">
-                    <div class="row">
-                            <span
-                                    id="minute"
-                                    class="pl-half grey-border w-100 py-half"
-                            >0</span
-                            ><i class="fa-solid fa-caret-down"></i>
-                    </div>
-                    <div class="deadline-option-box py-half grey-border">
-                      <ul class="px-half">
-                        <li>1</li>
-                        <li>2</li>
-                        <li>3</li>
-                        <li>31</li>
-                        <li>3</li>
-                        <li>31</li>
-                        <li>3</li>
-                        <li>3</li>
-                        <li>3</li>
-                        <li>3</li>
-                        <li>3</li>
-                        <li>12</li>
-                      </ul>
-                    </div>
-                  </div>
-                  <span>분</span>
-                </div><!-- end of 분 -->
+                <div id="local-date" class="row mr-2">
+                  <i class="fa-regular fa-calendar mx-3quarter"></i>
+                  <input type="text" id="year" placeholder="년" data-num="4" >
+                  <label for="year" class="hidden">년도</label>
+                  <span class="mx-quarter">-</span>
+                  <input type="text" id="month" placeholder="월" data-num="2" >
+                  <label for="month" class="hidden">월</label>
+                  <span class="mx-quarter">-</span>
+                  <input type="text" id="date" placeholder="일" class="mr-3quarter" data-num="2">
+                  <label for="date" class="hidden">일</label>
+                </div>
+                <div id="local-time" class="row mr-2">
+                  <i class="fa-regular fa-clock mx-3quarter"></i>
+                  <input type="text" id="hour" placeholder="시" data-num="2" >
+                  <label for="hour" class="hidden">시</label>
+                  <span class="mx-quarter">:</span>
+                  <input type="text" id="minute" placeholder="분" class="mr-3quarter" data-num="2">
+                  <label for="minute" class="hidden">분</label>
+                </div>
               </div>
               <div>
                 <input
-                        type="checkbox"
                         id="isEndless"
-                /><label for="isEndless" class="ml-quarter"
-              >상시모집</label
-              >
+                        type="checkbox"
+                />
+                <label class="ml-quarter" for="isEndless">상시모집</label>
               </div>
             </div>
           </div>
-          <div class="error-box"><span class="error-msg deadline"></span></div>
+          <div><div class="error-msg deadline"></div></div>
         </div>
       </div><!-- end of 마감일 -->
     </div><!-- end of 채용조건 -->
-    <div id="location-box" class="mb-3 faint-border-bottom pb-1">
+    <div class="mb-3 faint-border-bottom pb-1" id="location-box">
       <div class="mb-1 py-1 border-bottom row">
-              <span class="larger bold">근무지역</span
-              ><span class="red-star">*</span
-      ><span class="ml-1 small">최대 10개의 지역을 선택할 수 있습니다.</span
-      >
+        <span class="larger bold">근무지역</span>
+        <span class="red-star">*</span>
+        <span class="ml-1 small">최대 10개의 지역을 선택할 수 있습니다.</span>
       </div>
       <div class="mx-1">
-        <div id="location-table" class="mb-half">
+        <div class="mb-half" id="location-table">
           <div class="row text-center">
             <div class="w-30 py-half"><span>시·도</span></div>
             <div class="w-70 py-half"><span>시·군·구</span></div>
@@ -387,94 +250,449 @@
             <span>선택 지역 1</span>
             <span>선택 지역 1</span>
           </div><!-- end of 3행 -->
-          <div id="resetBtn" class="row px-1 pb-1">
-            <span id="locationCnt" class="ml-1 small mr-1"> 10 / 10 </span>
-                  <span class="grey-border px-1 py-half"
-                  ><i class="fa-solid fa-arrow-rotate-left"></i>초기화</span
-                  >
+          <div class="row px-1 pb-1" id="resetBtn">
+            <span class="ml-1 small mr-1" id="locationCnt"> 10 / 10 </span>
+            <span class="grey-border px-1 py-half"><i class="fa-solid fa-arrow-rotate-left"></i>초기화</span>
           </div><!-- end of 4행 -->
           <div id="location-list">
-            <input type="hidden" name="">
+            <input name="" type="hidden">
           </div>
         </div>
       </div>
-      <div class="mx-1"><span class="error-msg"></span></div>
+      <div class="mx-1"><div class="error-msg"></div></div>
     </div><!-- end of 근무지역 -->
     <div class="mb-3 faint-border-bottom pb-1">
       <div class="mb-1 py-1 border-bottom row">
-              <span class="larger bold">상세내용</span
-              ><span class="red-star">*</span>
+        <span class="larger bold">상세내용</span><span class="red-star">*</span>
       </div>
       <div class="mx-1">
-        <div id="editor" class="mb-half"></div>
+        <div class="mb-half" id="editor"></div>
       </div>
       <div class="mx-1">
-              <span class="error-msg"></span>
+        <div class="error-msg"></div>
       </div>
     </div><!-- end of 상세내용 -->
     <div class="row sp-center mt-5 mb-6">
       <button
-              type="button"
               class="py-1 w-15 mr-1 grey-border"
               id="submitBtn"
+              type="button"
       >
-        등록하기</button
-      ><button
-            type="button"
-            class="py-1 w-15 ml-1 grey-border"
-            id="cancelBtn"
-    >
-      취소
-    </button>
+        등록하기
+      </button>
+      <button
+              class="py-1 w-15 ml-1 grey-border"
+              id="cancelBtn"
+              type="button"
+      >
+        취소
+      </button>
     </div>
   </form>
 </div>
+
 <script layout:fragment="script" th:inline="javascript">
 
-  // 변수 선언
-  const registerForm = document.getElementById("registerForm")
-  const submitBtn = document.getElementById("submitBtn")
-  const errors = [[${errors}]]
+  /* 변수 선언 */
+  const registerForm = document.getElementById("registerForm");
 
+  const addressBtn = document.getElementById("addressBtn");         // 주소 검색 button
+  const roadAddress = document.getElementById("roadAddress");       // 도로명 주소 input
+
+  const title = document.getElementById("title");                   // 제목 input
+
+  const expBtnArray = document.querySelectorAll(".expBtn");         // 신입·경력 span
+  const expYear = document.getElementById("expYear");               // 경력 년수 input
+
+  const eduBtn = document.getElementById("eduBtn");                 // 최종학력 span
+  const eduBox = document.getElementById("edu-box");
+  const eduOptionArray = document.querySelectorAll(".edu-option")   // 최종학력 li
+
+  const deadlineSetting = document.getElementById("deadline-setting");
+  const deadlineInputs = deadlineSetting.querySelectorAll("input");     // 마감기한 input
+  const isEndless = document.getElementById("isEndless");           // 상시모집 checkbox input
+
+  const submitBtn = document.getElementById("submitBtn");
+  const everyInput = document.querySelectorAll("input");
+  const errors = [[${errors}]];
+
+
+  /*
+  회사 주소는 input#address를 이용해 서버로 전송한다.
+  Before submit: totalAddress() 호출
+  */
+  // 주소 검색 api 실행: 클릭 이벤트
+  addressBtn.addEventListener("click", findAddress);
+  roadAddress.addEventListener("click", findAddress);
+
+  // 선택한 도로명주소를 input#roadAddress에 저장한다.
+  function findAddress() {
+    new daum.Postcode({
+      oncomplete: function(data) {
+        roadAddress.value = data["roadAddress"];
+        removeErrorMsg("roadAddress");
+      }
+    }).open();
+  }
+
+  // 도로명주소와 상세주소를 합친 전체주소를 input#address에 저장한다.
+  function totalAddress() {
+    const detailAddress = document.getElementById("detailAddress");   // 상세 주소 input
+    const address = document.getElementById("address");               // 전체 주소 input
+    address.value = `${roadAddress.value} ${detailAddress.value}`;
+  }
+
+
+  /*
+  제목의 글자수를 카운트하고, 50자 이내로 제한한다.
+  */
+  // 글자가 입력될 때마다 글자수 카운트: 인풋 이벤트
+  title.addEventListener("input", countTitle);
+
+  function countTitle() {
+    const titleCnt = document.getElementById("titleCnt");             // 글자수 span
+
+    const max = 50;
+    let current = (this.value ?? '').length;      // ??: nullish coalescing operator
+
+    if(current > max) {
+      // 제목이 50자를 초과하는 경우, 뒷부분을 잘라낸다.
+      this.value = this.value.slice(0, max);
+      current = this.value.length;
+    }
+
+    // 글자수를 화면에 표시한다.
+    titleCnt.textContent = `( ${current} / ${max} )`;
+  }
+  countTitle();
+
+
+  /*
+  신입·경력 span을 클릭하면 css가 수정되고, input#exp에 구분값이 저장된다. (0: 신입, 1:경력)
+  경력 span을 선택한 경우에만 expYear-box가 나타난다.
+  */
+  // 각각의 span에 클릭 이벤트를 연결한다.
+  expBtnArray.forEach(btn => {
+    btn.addEventListener("click", function () {
+      const exp = document.getElementById("exp");                       // 경력 구분값 input
+      const expYearBox = document.getElementById("expYear-box");        // 경력 년수 div
+
+      // 기존의 에러 메시지를 제거한다.
+      removeErrorMsg("exp")
+
+      // 기존의 clicked 클래스를 전부 제거한다.
+      expBtnArray.forEach(all => {
+        all.classList.remove("clicked");
+      })
+
+      // 선택된 span에만 clicked 클래스를 추가한다.
+      this.classList.add("clicked");
+
+      // input#exp에 경력 구분값을 저장한다.
+      const num = this.dataset.num;
+      exp.value = num;
+
+      // 경력을 선택한 경우에만 expYear-box를 보여준다.
+      if(num === "1") {
+        expYearBox.style.display = "block";
+      } else {
+        expYearBox.style.display = "none";
+      }
+    });
+  })
+
+
+  /*
+  경력 년수는 0부터 99까지의 숫자만 입력되도록 제한한다.
+  */
+  // 값이 입력될 때 즉각적으로 제한: 인풋 이벤트
+  expYear.addEventListener("input", function () {
+    // 숫자가 아닌 글자는 지운다.
+    let inputValue = this.value.replace(/[^0-9]/g, '');
+
+    // 최대 두 자리의 숫자만 허용한다.
+    this.value = inputValue.slice(0, 2);
+  })
+
+
+  /*
+  span#eduBtn을 클릭하면 옵션 목록인 div#edu-option-box가 나타난다.
+  li.edu-option을 클릭하면 해당 텍스트가 span#eduBtn에 나타나고
+  data-num값이 input#edu에 저장된다.
+  옵션 목록은 다음과 같은 경우에 사라진다.
+    1. 마우스가 옵션 목록 바깥으로 벗어났을 때
+    2. 옵션이 선택 되었을 때
+  */
+  // span#eduBtn을 클릭하면 옵션 목록이 나타나게 한다.
+  eduBtn.addEventListener("click", function () {
+    let eduOptionBox = document.getElementById("edu-option-box");
+    eduOptionBox.classList.toggle("hidden");
+  })
+
+  // 옵션 목록 바깥으로 마우스가 벗어나면 옵션 목록을 숨긴다.
+  eduBox.addEventListener("mouseleave", function () {
+    let eduOptionBox = document.getElementById("edu-option-box");
+    eduOptionBox.classList.add("hidden");
+  })
+
+  // 각각의 옵션 li에 클릭이벤트를 연결한다.
+  eduOptionArray.forEach(option => {
+    option.addEventListener("click", function () {
+      // span#eduBtn의 텍스트를 수정한다.
+      eduBtn.textContent = this.textContent;
+      eduBtn.style.color = "#171717";
+
+      // input#edu에 학력 구분값을 저장한다.
+      const edu = document.getElementById("edu");                       // 최종학력 input
+      edu.value = this.dataset.num;
+
+      // 기존의 에러 메시지를 지운다.
+      removeErrorMsg("edu");
+
+      // 옵션 목록 숨긴다.
+      let eduOptionBox = document.getElementById("edu-option-box");
+      eduOptionBox.classList.add("hidden");
+    })
+  })
+
+
+  /*
+  마감 날짜와 마감 시간은 숫자만 입력할 수 있도록 제한하고, 각각 포맷을 적용한다.
+  상시모집을 선택하면 div#deadline-setting을 안 보이게 하고,
+  마감일을 '9999-12-31'으로 설정한다.
+  Before submit: getEpochMillis() 호출
+  */
+  // input 이벤트를 연결해 입력값을 제한한다.
+  deadlineInputs.forEach(input => {
+    input.addEventListener("input", function () {
+      // 숫자가 아닌 글자는 지운다.
+      let inputValue = this.value.replace(/[^0-9]/g, '');
+
+      // 글자수를 제한한다.
+      let length = this.dataset.num;
+      if(inputValue.length > length) {
+        inputValue = inputValue.slice(0, length);
+      }
+
+      // 변경 사항을 적용한다.
+      this.value = inputValue;
+    })
+  })
+
+  // change 이벤트를 연결해 YYYY-MM-DD, hh:mm 포맷을 적용한다.
+  deadlineInputs.forEach(input => {
+    input.addEventListener("change", function () {
+      let inputValue = this.value.replace(/[^0-9]/g, '');
+      let length = parseInt(this.dataset.num);
+
+      if(inputValue.length < length) {
+        // 앞에 '0'을 추가해 글자수를 맞춘다.
+        inputValue = inputValue.padStart(length, '0');
+      }
+
+      // 변경 사항을 적용한다.
+      this.value = inputValue;
+
+      // 기존의 에러 메시지를 지운다.
+      removeErrorMsg("deadline");
+    })
+  })
+
+  // 상시모집 input에 change 이벤트를 연결해 css를 수정한다.
+  isEndless.addEventListener("change", function () {
+    // 기존의 에러 메시지를 지운다.
+    removeErrorMsg("deadline");
+
+    if(this.checked) {
+      deadlineSetting.classList.add("hidden");
+    } else {
+      deadlineSetting.classList.remove("hidden");
+    }
+  })
+
+  // 마감일의 EpochMillis 값을 구하고, input#deadline에 저장한다.
+  function getEpochMillis() {
+    const deadline = document.getElementById("deadline");
+
+    if(isEndless.checked) {
+
+      // 상시모집인 경우, 마감일을 '9999-12-31'로 설정한다.
+      deadline.value = Date.parse('9999-12-31');
+
+      return true;
+
+    } else {
+
+      // 상시모집이 아닌 경우, 설정된 마감일을 활용한다.
+      let year = document.getElementById("year").value;
+      let month = document.getElementById("month").value;
+      let date = document.getElementById("date").value;
+      let hour = document.getElementById("hour").value;
+      let minute = document.getElementById("minute").value;
+
+      // 마감일 입력값 중 하나라도 null 또는 empty이면 return false
+      const isNullOrEmpty = Array
+              .from(deadlineInputs)
+              .some(input => input.value.trim() === "");
+      if(isNullOrEmpty) {
+        showErrorMsg("deadline", "마감일을 설정해주세요.")
+        scrollToErrorBox("deadline");
+        return false;
+      }
+
+      // EpochMillis 값이 NaN이면 return false
+      console.log('마감일: ', new Date(`${year}-${month}-${date}T${hour}:${minute}`))
+      let ms = Date.parse(`${year}-${month}-${date}T${hour}:${minute}`);
+      if(isNaN(ms)) {
+        showErrorMsg("deadline", "잘못된 마감일입니다.")
+        scrollToErrorBox("deadline");
+        return false
+      }
+
+      // input#deadline에 EpochMillis 값을 저장한다.
+      deadline.value = ms;
+      return true;
+    }
+  }
+
+
+  /*
+  Quill text editor
+  */
   // 상세내용 작성할 Quill text editor 불러오기
   const quill = new Quill("#editor", {
     modules: {
       toolbar: [
-        [{ size: ["huge", "large", false, "small"] }],
+        [{size: ["huge", "large", false, "small"]}],
         ["bold", "italic"],
-        [{ list: "ordered" }, { list: "bullet" }],
-        [{ indent: "-1" }, { indent: "+1" }],
+        [{list: "ordered"}, {list: "bullet"}],
+        [{indent: "-1"}, {indent: "+1"}],
         ["image"],
       ],
     },
     theme: "snow",
   });
 
-  // submitBtn 클릭시 채용공고가 서버로 전송된다.
+
+  /*
+  채용공고를 서버로 전송하기 전, 다음과 같은 사항을 진행한다.
+    1. 화면에 표시된 .error-msg 내용 초기화
+    2. input#address에 회사 주소 저장
+    3. 필수 입력 항목 검사
+    4. input#deadline에 마감일 EpochMillis 유효성 검사
+  */
   submitBtn.addEventListener("click", function () {
+    // 화면에 존재하는 에러 메시지 초기화
+    let errorBoxes = document.querySelectorAll(".error-msg");
+    errorBoxes.forEach(errorBox => errorBox.innerHTML = '');
+
+    // 회사 주소 저장
+    totalAddress();
+
+    // input.required의 value가 null 또는 empty인지 검사한다.
+    const required = document.querySelectorAll("input.required");
+    const isNullOrEmpty = Array
+            .from(required)
+            .find(input => input.value.trim() === "");
+
+    if(isNullOrEmpty) {
+      // 에러메시지를 출력한다.
+      showErrorMsg(isNullOrEmpty.id, "필수 입력 항목입니다.")
+
+      // isNullOrEmpty 항목으로 스크롤한다.
+      scrollToErrorBox(isNullOrEmpty.id);
+      return false;
+    }
+
+    // 마감일이 유효하지 않은 경우, 에러 메시지를 출력하고 return false
+    if(!getEpochMillis()) {
+      // 에러메시지를 출력한다.
+      showErrorMsg("deadline", "유효하지 않은 마감일입니다.");
+
+      // div#deadline-setting으로 스크롤한다.
+      scrollToErrorBox("deadline");
+
+      return false;
+    }
+
+    // 전송
     registerForm.submit();
   })
 
-  // 리다이렉트 된 에러 메시지를 errorBox에 삽입해 보여주거나 alert로 띄운다.
-  // bindingFailure 에러는 디폴트 에러 메시지가 영어이므로 수정한다.
+
+  /*
+  리다이렉트 된 에러 메시지를 errorBox에 삽입해 보여주거나 alert로 띄운다.
+  */
   console.log(errors)
-  if(errors) {
-    for (let i = 0; i < errors.length; i++) {
-      let field = errors[i]["field"];
-      let defaultMsg = errors[i]["defaultMessage"];
-      let errorBox = document.querySelector('.error-msg' + "." + field);
+  if (errors) {
+    for (const error of errors) {
+      let field = error.field;
+      let defaultMsg = error.defaultMessage;
 
-      if(errors[i]["bindingFailure"]) {
-        defaultMsg = "올바른 값을 입력해주세요.";
+      // bindingFailure 에러는 디폴트 에러 메시지가 영어이므로 수정한다.
+      if (error.bindingFailure) {
+        if (field === "exp") {
+          defaultMsg = "경력 구분을 선택해주세요."
+        } else if (field === "edu") {
+          defaultMsg = "최종학력을 선택해주세요."
+        } else if (field === "deadline") {
+          defaultMsg = "마감일을 설정해주세요.";
+        }
       }
 
-      if(errorBox !== null) {
-        let span = document.createElement('span');
-        span.innerHTML = defaultMsg;
-        errorBox.appendChild(span);
-      } else {
-        alert(defaultMsg);
-      }
+      // 각각의 에러 메시지를 표시한다.
+      showErrorMsg(field, defaultMsg);
+    }
+
+    // 첫번째 에러가 발생한 곳으로 스크롤한다.
+    scrollToErrorBox(errors[0]["field"])
+  }
+
+  // errorBox를 찾아 에러 메시지를 출력한다.
+  function showErrorMsg(id, msg) {
+    // errorBox를 지정한다.
+    let errorBox = document.querySelector(".error-msg." + id);
+
+    if(errorBox) {
+      // errorBox에 에러 메시지를 삽입한다.
+      let span = document.createElement('span');
+      span.textContent = msg;
+      errorBox.innerHTML = '';
+      errorBox.appendChild(span);
+    } else {
+      // 경고창에 에러 메시지를 띄운다.
+      alert(msg);
+    }
+  }
+
+  // 에러 메시지가 출력되는 곳으로 스크롤한다.
+  function scrollToErrorBox(id) {
+    // errorBox를 지정한다.
+    let errorBox = document.querySelector(".error-msg." + id);
+
+    if(errorBox) {
+      const windowHeight = window.innerHeight;
+      const targetHeight = errorBox.clientHeight;
+      const scrollPosition = errorBox.offsetTop - (windowHeight - targetHeight) / 2;
+      window.scrollTo({
+        top: scrollPosition
+      });
+    }
+  }
+
+  // input 태그에 input 이벤트를 연결하고, 에러 메시지를 지운다.
+  everyInput.forEach(input => {
+    input.addEventListener("input", function () {
+      removeErrorMsg(input.id);
+    })
+  })
+
+  function removeErrorMsg(id) {
+    // errorBox를 지정한다.
+    let errorBox = document.querySelector(".error-msg." + id);
+
+    if(errorBox) {
+      errorBox.innerHTML = '';
     }
   }
 

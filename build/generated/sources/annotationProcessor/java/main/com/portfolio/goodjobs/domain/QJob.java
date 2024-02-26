@@ -25,7 +25,7 @@ public class QJob extends EntityPathBase<Job> {
 
     public final StringPath companyName = createString("companyName");
 
-    public final DateTimePath<java.sql.Timestamp> deadline = createDateTime("deadline", java.sql.Timestamp.class);
+    public final DateTimePath<java.time.LocalDateTime> deadline = createDateTime("deadline", java.time.LocalDateTime.class);
 
     public final NumberPath<Byte> edu = createNumber("edu", Byte.class);
 
@@ -34,12 +34,12 @@ public class QJob extends EntityPathBase<Job> {
     public final NumberPath<Short> expYear = createNumber("expYear", Short.class);
 
     //inherited
-    public final DateTimePath<java.sql.Timestamp> modDate = _super.modDate;
+    public final DateTimePath<java.time.LocalDateTime> modDate = _super.modDate;
 
     public final NumberPath<Long> no = createNumber("no", Long.class);
 
     //inherited
-    public final DateTimePath<java.sql.Timestamp> regDate = _super.regDate;
+    public final DateTimePath<java.time.LocalDateTime> regDate = _super.regDate;
 
     public final StringPath title = createString("title");
 

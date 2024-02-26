@@ -1,9 +1,11 @@
 package com.portfolio.goodjobs.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Future;
 import lombok.*;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -26,7 +28,7 @@ public class Job extends BaseEntity{
     @Column(length = 100, nullable = false)
     private String address;             // 회사 주소
 
-    @Column(length = 30, nullable = false)
+    @Column(length = 50, nullable = false)
     private String title;               // 공고 제목
 
     @Column(nullable = false)
@@ -38,7 +40,10 @@ public class Job extends BaseEntity{
     @Column(columnDefinition = "TINYINT")
     private byte edu;                   // 최종학력 (0:무관, 1:고졸, 2:초대졸, 3:대졸, 4:석사, 5:박사)
 
-    @Column(nullable = false, columnDefinition = "TIMESTAMP(6)")
-    private Timestamp deadline;         // 마감일
+    @Column(nullable = false)
+    private LocalDateTime deadline;     // 마감일 (시간대: Asia/Tokyo)
 
+    public void setDeadline(LocalDateTime newDeadline) {
+        this.deadline = newDeadline;
+    }
 }
