@@ -3,16 +3,19 @@ package com.portfolio.goodjobs.domain;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Future;
 import lombok.*;
+import org.hibernate.annotations.BatchSize;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
+@ToString(exclude = "locationSet")
 public class Job extends BaseEntity{
 
     @Id
@@ -21,6 +24,8 @@ public class Job extends BaseEntity{
 
     @Column(length = 15, nullable = false)
     private String writer;              // 작성자 아이디
+
+    private String logoFileName;        // 회사 로고 파일명
 
     @Column(length = 30, nullable = false)
     private String companyName;         // 회사명
@@ -37,13 +42,35 @@ public class Job extends BaseEntity{
     @Column(columnDefinition = "TINYINT UNSIGNED")
     private Short expYear;              // 경력년수
 
-    @Column(columnDefinition = "TINYINT")
+    @Column(columnDefinition = "TINYINT", nullable = false)
     private byte edu;                   // 최종학력 (0:무관, 1:고졸, 2:초대졸, 3:대졸, 4:석사, 5:박사)
 
     @Column(nullable = false)
     private LocalDateTime deadline;     // 마감일 (시간대: Asia/Tokyo)
 
+    @OneToMany(mappedBy = "job", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY, orphanRemoval = true)
+    @Builder.Default
+    //@BatchSize(size = 20)
+    private Set<JobLocation> locationSet = new HashSet<>();
+
+    @Column(columnDefinition = "TEXT", nullable = false)
+    private String detail;              // 상세 내용
+
     public void setDeadline(LocalDateTime newDeadline) {
         this.deadline = newDeadline;
+    }
+
+    public void addLocation(int sigungu) {
+        JobLocation jobLocation = JobLocation.builder()
+                .sigungu(sigungu)
+                .ord(locationSet.size())
+                .job(this)
+                .build();
+        locationSet.add(jobLocation);
+    }
+
+    public void clearLocations() {
+        locationSet.forEach(jobLocation -> jobLocation.changeJob(null));
+        this.locationSet.clear();
     }
 }

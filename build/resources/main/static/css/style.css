@@ -556,7 +556,7 @@ h1 {
 }
 
 /* 채용공고 작성폼 */
-.logo-box {
+#logo-box {
     width: 200px;
     height: 200px;
     min-width: 200px;
@@ -568,6 +568,7 @@ h1 {
 
 #logo-thumbnail {
     border: none;
+    border-radius: 100%;
 }
 
 #camera-box {
@@ -742,7 +743,6 @@ h1 {
     padding: 4px 8px;
     margin-top: 4px;
     margin-bottom: 4px;
-    font-weight: bold;
 }
 
 #location-table > :nth-child(2) > :nth-child(2) span {
@@ -751,8 +751,7 @@ h1 {
     padding: 4px 8px;
     margin-top: 4px;
     margin-bottom: 4px;
-    background-color: #ffda6a;
-    font-weight: bold;
+
     border-radius: 1rem;
 }
 
@@ -760,10 +759,17 @@ h1 {
     flex-wrap: wrap;
     height: calc(4rem + 90px);
     overflow-y: scroll;
+    align-content: flex-start;
 }
 
-#location-table > :nth-child(2) > div:nth-child(2) {
-    align-content: flex-start;
+#sido-box span.selected {
+    font-weight: bold;
+    color: #ff501b;
+}
+
+#sigungu-box span.selected {
+    font-weight: bold;
+    background-color: #ffda6a;
 }
 
 #location-table > :nth-child(3) {
@@ -794,19 +800,23 @@ h1 {
     border-bottom-right-radius: 8px;
 }
 
-#resetBtn {
+#reset-box {
     justify-content: flex-end;
-    cursor: pointer;
 }
 
-#resetBtn i {
+#reset-box i {
     margin-right: 8px;
 }
 
-#editor .ql-editor {
-    min-height: calc(100vh / 3);
-    max-height: 100vh;
-    overflow-y: auto;
+#resetBtn {
+    cursor: pointer;
+}
+
+#detail {
+    width: 100%;
+    min-height: calc(100vh / 2);
+    resize: none;
+    padding: 1rem;
 }
 
 #submitBtn,
