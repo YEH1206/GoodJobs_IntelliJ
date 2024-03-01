@@ -6,12 +6,12 @@ import lombok.ToString;
 
 import java.util.List;
 
+/**
+ * 제네릭 타입으로 선언해 다양한 Entity를 활용할 수 있게 한다.
+ */
 @Getter
 @ToString
 public class PageResponseDto<E> {
-    /*
-    * 제네릭 타입으로 선언해 다양한 Entity에서 활용할 수 있게 한다.
-    * */
 
     private int page;               // 조회할 페이지 번호
     private int size;               // 페이지 당 채용공고 수

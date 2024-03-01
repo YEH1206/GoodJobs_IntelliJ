@@ -56,6 +56,17 @@ public class Job extends BaseEntity{
     @Column(columnDefinition = "TEXT", nullable = false)
     private String detail;              // 상세 내용
 
+    public void change(String logoFileName, String address, String title,
+                       boolean exp, Short expYear, byte edu, String detail) {
+        this.logoFileName = logoFileName;
+        this.address = address;
+        this.title = title;
+        this.exp = exp;
+        this.expYear = expYear;
+        this.edu = edu;
+        this.detail = detail;
+    }
+
     public void setDeadline(LocalDateTime newDeadline) {
         this.deadline = newDeadline;
     }

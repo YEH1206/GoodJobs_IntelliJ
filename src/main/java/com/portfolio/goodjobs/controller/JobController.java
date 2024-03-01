@@ -2,11 +2,13 @@ package com.portfolio.goodjobs.controller;
 
 import com.portfolio.goodjobs.dto.JobDto;
 import com.portfolio.goodjobs.dto.PageRequestDto;
+import com.portfolio.goodjobs.dto.PageResponseDto;
 import com.portfolio.goodjobs.enums.Sido;
 import com.portfolio.goodjobs.enums.sigungu.Gyeonggi;
 import com.portfolio.goodjobs.enums.sigungu.Seoul;
 import com.portfolio.goodjobs.service.JobService;
 import jakarta.validation.Valid;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.coyote.Response;
@@ -14,10 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.lang.invoke.SwitchPoint;
@@ -61,10 +60,16 @@ public class JobController {
         return "redirect:/job/register";
     }
 
+    @GetMapping("read")
+    public String readOne(Long no, PageRequestDto pageRequestDto, Model model) {
+        JobDto jobDto = jobService.readOne(no);
+        System.out.println(jobDto);
+        model.addAttribute("dto", jobDto);
+        return null;
+    }
 
     @GetMapping("/list")
     public void list(PageRequestDto pageRequestDto, Model model) {
-
     }
 
     @GetMapping("/sigunguList")
@@ -89,6 +94,7 @@ public class JobController {
         }
     }
 
+    @Getter
     private static class SigunguDto {
         private final String name;
 
@@ -97,14 +103,6 @@ public class JobController {
         public SigunguDto(String name, int code) {
             this.name = name;
             this.code = code;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public int getCode() {
-            return code;
         }
     }
 }

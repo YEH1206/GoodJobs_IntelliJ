@@ -24,19 +24,35 @@ public class PageRequestDto {
     @Builder.Default
     private int size = 20;              // 페이지 당 채용공고 개수
 
-    private String type;                // 검색 조건: l(지역별), p(채용중) 조합
+    private String location;           // 검색할 지역 리스트 (구분자:+)
 
     private String keyword;             // 검색 키워드
 
+    @Builder.Default
+    private boolean closed = false;       // 마감된 공고 검색 여부 (T:포함, F:제외)
+
+    @Builder.Default
+    private String sortType = "no";      // 정렬 기준: no(최신등록순), deadline(마감임박순)
+
     private String link;                // 현재 페이징 상태를 문자열로 구성
 
-    public String[] getTypes() {
-        if(type == null || type.isEmpty()) return null;
-        return type.split("");
+    public String[] getLocations() {
+        if(location == null || location.isEmpty()) return null;
+        return location.split("\\+");
     }
 
-    public Pageable getPageable(String... props) {
-        return PageRequest.of(this.page - 1, this.size, Sort.by(props).descending());
+    public Pageable getPageable() {
+        Sort sort = Sort.by(sortType);
+
+        if("no".equals(sortType)) {
+            // 최신등록순 정렬
+            sort.descending();
+        } else if("deadline".equals(sortType)) {
+            // 마감임박순 정렬
+            sort.ascending();
+        }
+
+        return PageRequest.of(this.page - 1, this.size, sort);
     }
 
     public String getLink() {
@@ -46,11 +62,20 @@ public class PageRequestDto {
             builder.append("page=").append(this.page);
             builder.append("&size=").append(this.size);
 
-            if(type != null && !type.isEmpty()) builder.append("&type=").append(type);
+            if(closed) {
+                builder.append("&closed=").append("true");
+            } else {
+                builder.append("&closed=").append("false");
+            }
+
+            if(location != null && !location.isEmpty()) builder.append("&location=").append(location);
 
             if(keyword != null && !keyword.isEmpty()) {
                 builder.append("&keyword=").append(URLEncoder.encode(keyword, StandardCharsets.UTF_8));
             }
+
+            if(sortType != null && !sortType.isEmpty()) builder.append("&sortType=").append(sortType);
+
             link = builder.toString();
         }
         return link;

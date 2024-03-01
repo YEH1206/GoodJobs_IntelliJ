@@ -3,6 +3,7 @@ package com.portfolio.goodjobs.service;
 import com.portfolio.goodjobs.domain.Job;
 import com.portfolio.goodjobs.domain.JobLocation;
 import com.portfolio.goodjobs.dto.JobDto;
+import com.portfolio.goodjobs.dto.JobListDto;
 import com.portfolio.goodjobs.dto.PageRequestDto;
 import com.portfolio.goodjobs.dto.PageResponseDto;
 import org.modelmapper.ModelMapper;
@@ -42,7 +43,7 @@ public interface JobService extends TimeConverter {
     /**
      * 검색조건에 해당하는 채용공고를 조회하고, 목록을 반환한다.
      */
-    PageResponseDto<JobDto> list(PageRequestDto pageRequestDto);
+    PageResponseDto<JobListDto> jobList(PageRequestDto pageRequestDto);
 
     default Job dtoToEntity(JobDto jobDto) {
 
@@ -90,5 +91,27 @@ public interface JobService extends TimeConverter {
         jobDto.setLocations(locationList);
 
         return jobDto;
+    }
+
+    /**
+     * entityToDto와 비슷한 로직이 중복되므로 리팩토링 필요해보임.
+     */
+    default JobListDto entityToListDto(Job job) {
+
+        JobListDto jobListDto = modelMapper().map(job, JobListDto.class);
+
+        // deadline: LocalDateTime -> Instant
+        Instant deadline = localDateTimeToInstant(job.getDeadline(), zoneId);
+        jobListDto.setDeadline(deadline);
+
+        // regDate: LocalDateTime -> Instant
+        Instant regDate = localDateTimeToInstant(job.getRegDate(), zoneId);
+        jobListDto.setRegDate(regDate);
+
+        // modDate: LocalDateTime -> Instant
+        Instant modDate = localDateTimeToInstant(job.getModDate(), zoneId);
+        jobListDto.setModDate(modDate);
+
+        return jobListDto;
     }
 }
