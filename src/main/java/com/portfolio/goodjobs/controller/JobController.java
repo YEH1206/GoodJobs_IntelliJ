@@ -1,6 +1,7 @@
 package com.portfolio.goodjobs.controller;
 
 import com.portfolio.goodjobs.dto.JobDto;
+import com.portfolio.goodjobs.dto.JobListDto;
 import com.portfolio.goodjobs.dto.PageRequestDto;
 import com.portfolio.goodjobs.dto.PageResponseDto;
 import com.portfolio.goodjobs.enums.Sido;
@@ -38,14 +39,14 @@ public class JobController {
     }
 
     @GetMapping("/register")
-    public void registerGET(Model model) {
+    public void registerGET(PageRequestDto pageRequestDto, Model model) {
         model.addAttribute("sidoList", Sido.values());
+        model.addAttribute("requestDto", pageRequestDto);
     }
 
     @PostMapping("/register")
     public String registerPOST(@Valid JobDto jobDto, BindingResult bindingResult,
                                RedirectAttributes redirectAttributes) {
-
         log.info(jobDto.toString());
 
         if(bindingResult.hasErrors()) {
@@ -70,6 +71,19 @@ public class JobController {
 
     @GetMapping("/list")
     public void list(PageRequestDto pageRequestDto, Model model) {
+        PageResponseDto<JobListDto> responseDto = jobService.jobList(pageRequestDto);
+        model.addAttribute("sidoList", Sido.values());
+        model.addAttribute("requestDto", pageRequestDto);
+        model.addAttribute("responseDto", responseDto);
+    }
+
+    @GetMapping("/searchResult")
+    public void search(PageRequestDto pageRequestDto, Model model) {
+        System.out.println(pageRequestDto);
+        PageResponseDto<JobListDto> responseDto = jobService.jobList(pageRequestDto);
+        model.addAttribute("sidoList", Sido.values());
+        model.addAttribute("requestDto", pageRequestDto);
+        model.addAttribute("responseDto", responseDto);
     }
 
     @GetMapping("/sigunguList")

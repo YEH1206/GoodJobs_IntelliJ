@@ -5,7 +5,6 @@ import com.portfolio.goodjobs.dto.upload.UploadResultDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import lombok.extern.log4j.Log4j2;
-import net.coobird.thumbnailator.Thumbnailator;
 import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
@@ -26,8 +25,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 
 @RestController
 @Log4j2
@@ -90,7 +89,7 @@ public class UpDownController {
                         .uuid(uuid)
                         .fileName(originalName)
                         .build());
-            };//end of loop
+            }//end of loop
             return ResponseEntity.status(HttpStatus.CREATED).body(list);
         }// end of if
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();

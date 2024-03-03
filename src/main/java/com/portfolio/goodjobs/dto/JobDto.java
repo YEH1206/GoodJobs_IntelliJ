@@ -21,7 +21,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class JobDto {
+public class JobDto implements BaseDto {
 
     private Long no;                    // 공고 번호
 
@@ -45,8 +45,6 @@ public class JobDto {
 
     private Instant regDate;            // 등록일
 
-    private Instant modDate;            // 수정일
-
     @NotNull(message = "경력 구분을 선택해주세요.")
     private boolean exp;                // 경력구분 (T:경력, F:신입)
 
@@ -62,6 +60,8 @@ public class JobDto {
 
     @NotEmpty(message = "근무지역을 선택해주세요.")
     private List<Integer> locations;     // 근무지역의 시군구 코드 리스트
+
+    private List<String> sigunguNames;      // 시군구 이름 리스트
 
     @NotEmpty(message = "상세한 내용을 입력해주세요.")
     @Size(max = 2000, message = "2000자 이내로 입력해주세요.")

@@ -27,28 +27,35 @@
     <div class="row">
       <a href=""><img th:src="@{/assets/main-logo.png}" alt="굿잡스 로고" /></a>
       <div class="ml-2" id="search-container">
-        <form action="">
+        <form action="/job/list" id="search-form">
           <div class="row">
             <div class="w-100">
               <input
                       type="text"
-                      id="searchInput"
+                      id="keyword"
+                      name="keyword"
                       class="w-100"
                       placeholder="회사명, 직종 등 검색어를 입력해주세요."
+                      th:value="${requestDto.keyword}"
               />
             </div>
             <div>
-              <label for="searchInput" id="searchButton">
+              <label for="keyword" id="searchButton">
                 <i class="fa-solid fa-magnifying-glass vh-center"></i>
               </label>
             </div>
+            <input type="hidden" id="page" name="page" th:value="${requestDto.page}">
+            <input type="hidden" id="size" name="size" th:value="${requestDto.size}">
+            <input type="hidden" id="location" name="location" th:value="${requestDto.location}">
+            <input type="hidden" id="closed" name="closed" th:checked="${requestDto.closed}">
+            <input type="hidden" id="sortType" name="sortType" th:value="${requestDto.sortType}">
           </div>
         </form>
       </div>
     </div>
     <div>
-      <a href="" class="grey">로그인</a
-      ><a href="" class="ml-1 grey">회원가입</a>
+      <a href="" class="header-grey">로그인</a
+      ><a href="" class="ml-1 header-grey">회원가입</a>
     </div>
   </div>
   <div class="header-row resolution-65">
@@ -107,8 +114,34 @@
   </div>
 </div>
 
-<script th:src="@{/js/scripts.js}"></script>
+<script>
+  const searchForm = document.getElementById("search-form");
+  const searchBtn = document.getElementById("searchButton");
+  const searchInput = document.getElementById("keyword");
 
+
+  /**
+   * 기존의 검색 조건을 유지한 채 검색한다.
+   * 검색 범위는 채용공고의 제목, 회사명, 상세내용.
+   */
+  // 검색 버튼에 클릭 이벤트를 연결한다.
+  searchBtn.addEventListener("click", function () {
+    resetPageNum();
+    search();
+  });
+
+  // 검색어 input에 엔터키 이벤트를 연결한다.
+  searchInput.addEventListener("keydown", function (event) {
+    if(event.key === 'Enter') {
+      event.preventDefault();
+      event.stopPropagation();
+      resetPageNum();
+      search();
+    }
+  })
+
+
+</script>
 <th:block layout:fragment="script">
 
 </th:block>

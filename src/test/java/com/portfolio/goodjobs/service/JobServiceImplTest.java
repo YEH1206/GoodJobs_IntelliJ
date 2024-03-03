@@ -32,7 +32,8 @@ class JobServiceImplTest {
     @Test
     public void testList() {
         PageRequestDto pageRequestDto = PageRequestDto.builder()
-                .closed(true)
+                .location("11530+11680")
+                .closed(false)
                 .build();
 
         PageResponseDto<JobListDto> result = jobService.jobList(pageRequestDto);

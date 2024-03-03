@@ -1,6 +1,8 @@
 package com.portfolio.goodjobs.enums.sigungu;
 
-public enum Gyeonggi {
+import com.portfolio.goodjobs.enums.CodeEnum;
+
+public enum Gyeonggi implements CodeEnum {
 
     GAPYEONG("가평군", 41820),
     GOYANG("고양시", 41280),
@@ -34,11 +36,14 @@ public enum Gyeonggi {
         this.code = code;
     }
 
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
     public int getCode() {
         return code;
     }
+
 }

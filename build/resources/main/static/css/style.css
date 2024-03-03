@@ -45,6 +45,11 @@ h1 {
     display: flex;
 }
 
+.col {
+    display: flex;
+    flex-direction: column;
+}
+
 .inline-block {
     display: inline-block;
 }
@@ -74,13 +79,25 @@ h1 {
     display: none !important;
 }
 
+.word-break {
+    word-break: keep-all;
+}
+
 .row {
     display: flex;
     align-items: center;
 }
 
+.pointer {
+    cursor: pointer;
+}
+
 .text-center {
     text-align: center;
+}
+
+.text-left {
+    text-align: left;
 }
 
 .w-10 {
@@ -162,6 +179,24 @@ h1 {
 
 .huge {
     font-size: 1.75rem;
+}
+
+.open {
+    color: #ff501b;
+    padding: 2px 6px;
+    border-radius: calc(1rem + 8px);
+    border: 1px solid #ff501b;
+}
+
+.close {
+    color: #6a6a6a;
+    padding: 2px 6px;
+    border-radius: calc(1rem + 8px);
+    border: 1px solid #6a6a6a;
+}
+
+.m-half {
+    margin: 8px;
 }
 
 .mt-1 {
@@ -298,6 +333,18 @@ h1 {
     margin-bottom: 16px;
 }
 
+.p-quarter {
+    padding: 4px;
+}
+
+.p-half {
+    padding: 8px;
+}
+
+.p-3quarter {
+    padding: 12px;
+}
+
 .p-1 {
     padding: 16px;
 }
@@ -308,6 +355,10 @@ h1 {
 
 .p-3 {
     padding: 48px;
+}
+
+.pt-half {
+    padding-top: 8px;
 }
 
 .pt-1 {
@@ -370,6 +421,11 @@ h1 {
 .px-4 {
     padding-left: 64px;
     padding-right: 64px;
+}
+
+.py-quarter {
+    padding-top: 4px;
+    padding-bottom: 4px;
 }
 
 .py-half {
@@ -458,7 +514,7 @@ h1 {
     width: 27rem;
 }
 
-#searchInput {
+#keyword {
     height: 2.5rem;
     border: none;
     outline: none;
@@ -473,16 +529,18 @@ h1 {
     cursor: pointer;
 }
 
-.grey {
+.header-grey {
     color: #9e9e9e;
     font-weight: 400;
     font-size: 0.875rem;
 }
 
+.grey {
+    color: #9e9e9e;
+}
+
 .dark-grey {
     color: #6a6a6a;
-    font-weight: 400;
-    font-size: 0.875rem;
 }
 
 #first-menu {
@@ -835,4 +893,106 @@ h1 {
 #cancelBtn {
     background-color: #333;
     border-color: #333;
+}
+
+
+/* 채용공고 목록 조회 */
+#sort-box {
+    width: 8rem;
+}
+
+#sortBtn {
+    font-size: 1rem;
+    color: #6a6a6a;
+    cursor: pointer;
+    padding-left: 12px;
+}
+
+#sortBtn:hover {
+    border: 1px solid #171717;
+}
+
+#sortDropdownBtn {
+    position: absolute;
+    right: 12px;
+    z-index: -1;
+    color: #333;
+}
+
+#sort-option-box {
+    display: block;
+    position: absolute;
+    width: 100%;
+    background-color: white;
+    z-index: 2;
+}
+
+#sort-option-box li {
+    padding: 8px 0;
+    color: #6a6a6a;
+    cursor: pointer;
+}
+
+#sort-option-box li:hover {
+    color: #171717;
+    font-weight: bold;
+}
+
+#size-box {
+    width: 8rem;
+}
+
+#sizeBtn {
+    font-size: 1rem;
+    color: #6a6a6a;
+    cursor: pointer;
+    padding-left: 12px;
+}
+
+#sizeBtn:hover {
+    border: 1px solid #171717;
+}
+
+#sizeDropdownBtn {
+    position: absolute;
+    right: 12px;
+    z-index: -1;
+    color: #333;
+}
+
+#size-option-box {
+    display: block;
+    position: absolute;
+    width: 100%;
+    background-color: white;
+    z-index: 2;
+}
+
+#size-option-box li {
+    padding: 8px 0;
+    color: #6a6a6a;
+    cursor: pointer;
+}
+
+#size-option-box li:hover {
+    color: #171717;
+    font-weight: bold;
+}
+
+#job-list-container > div {
+    border-bottom: 1px solid #d2d2d2;
+}
+
+#job-list-container > div:nth-child(1) {
+    border-top: 1px solid #171717;
+}
+
+.prevNext {
+    border: 1px solid #d2d2d2;
+    border-radius: 4px;
+}
+
+.active {
+    color: #ff501b;
+    font-weight: bold;
 }

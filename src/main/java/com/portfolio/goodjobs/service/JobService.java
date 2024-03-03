@@ -2,16 +2,18 @@ package com.portfolio.goodjobs.service;
 
 import com.portfolio.goodjobs.domain.Job;
 import com.portfolio.goodjobs.domain.JobLocation;
-import com.portfolio.goodjobs.dto.JobDto;
-import com.portfolio.goodjobs.dto.JobListDto;
-import com.portfolio.goodjobs.dto.PageRequestDto;
-import com.portfolio.goodjobs.dto.PageResponseDto;
+import com.portfolio.goodjobs.dto.*;
+import com.portfolio.goodjobs.enums.CodeEnum;
+import com.portfolio.goodjobs.enums.sigungu.Gyeonggi;
+import com.portfolio.goodjobs.enums.sigungu.Seoul;
 import org.modelmapper.ModelMapper;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public interface JobService extends TimeConverter {
@@ -66,52 +68,82 @@ public interface JobService extends TimeConverter {
         return job;
     }
 
-    default JobDto entityToDto(Job job) {
-
-        JobDto jobDto = modelMapper().map(job, JobDto.class);
-
-        // deadline: LocalDateTime -> Instant
-        Instant deadline = localDateTimeToInstant(job.getDeadline(), zoneId);
-        jobDto.setDeadline(deadline);
-
-        // regDate: LocalDateTime -> Instant
-        Instant regDate = localDateTimeToInstant(job.getRegDate(), zoneId);
-        jobDto.setRegDate(regDate);
-
-        // modDate: LocalDateTime -> Instant
-        Instant modDate = localDateTimeToInstant(job.getModDate(), zoneId);
-        jobDto.setModDate(modDate);
-
-        // 근무지역: Set -> List
-        List<Integer> locationList = job.getLocationSet()
-                        .stream()
-                                .map(JobLocation::getSigungu)
-                                        .sorted()
-                                                .collect(Collectors.toList());
-        jobDto.setLocations(locationList);
-
-        return jobDto;
-    }
 
     /**
-     * entityToDto와 비슷한 로직이 중복되므로 리팩토링 필요해보임.
+     * TODO: 동적 쿼리 활용할 때 select 범위 지정하는 거 공부해야 함.
+     * select 범위 설정이 잘 안돼서 임시방편으로 JobListDto를 만들어 활용하고 있음.
      */
-    default JobListDto entityToListDto(Job job) {
-
-        JobListDto jobListDto = modelMapper().map(job, JobListDto.class);
+    default <D extends BaseDto> D entityToDto(Job job, Class<D> dtoClass) {
+        D dto = modelMapper().map(job, dtoClass);
 
         // deadline: LocalDateTime -> Instant
         Instant deadline = localDateTimeToInstant(job.getDeadline(), zoneId);
-        jobListDto.setDeadline(deadline);
+        dto.setDeadline(deadline);
 
         // regDate: LocalDateTime -> Instant
         Instant regDate = localDateTimeToInstant(job.getRegDate(), zoneId);
-        jobListDto.setRegDate(regDate);
+        dto.setRegDate(regDate);
 
-        // modDate: LocalDateTime -> Instant
-        Instant modDate = localDateTimeToInstant(job.getModDate(), zoneId);
-        jobListDto.setModDate(modDate);
+        // 근무지역: Set<JobLocation> -> List<String>
+        List<String> locationList = job.getLocationSet()
+                .stream()
+                .map(JobLocation::getSigungu)
+                .sorted()
+                .map(code -> getNameByCode(code, determineEnumClass(code)))
+                .toList();
+        dto.setSigunguNames(locationList);
 
-        return jobListDto;
+        return dto;
+    }
+
+//    default JobDto entityToDto(Job job) {
+//        System.out.println(job);
+//        System.out.println(job.getLocationSet());
+//        System.out.println(job.getRegDate());
+//
+//        JobDto jobDto = modelMapper().map(job, JobDto.class);
+//
+//        // deadline: LocalDateTime -> Instant
+//        Instant deadline = localDateTimeToInstant(job.getDeadline(), zoneId);
+//        jobDto.setDeadline(deadline);
+//
+//        // regDate: LocalDateTime -> Instant
+//        Instant regDate = localDateTimeToInstant(job.getRegDate(), zoneId);
+//        jobDto.setRegDate(regDate);
+//
+//        // 근무지역: Set<JobLocation> -> List<String>
+//        List<String> locationList = job.getLocationSet()
+//                .stream()
+//                .map(JobLocation::getSigungu)
+//                .sorted()
+//                .map(code -> getNameByCode(code, determineEnumClass(code)))
+//                .toList();
+//        jobDto.setSigunguNames(locationList);
+//
+//        return jobDto;
+//    }
+
+    // 시군구 코드 -> 시·도 선택
+    default <E extends Enum<E> & CodeEnum> Class<? extends CodeEnum> determineEnumClass(int code) {
+        if (String.valueOf(code).startsWith("11")) {
+            return Seoul.class;
+
+        } else if (String.valueOf(code).startsWith("41")) {
+            return Gyeonggi.class;
+        }
+        return null;
+    }
+
+    // 시군구 코드 -> 시군구 이름
+    default <E extends Enum<E> & CodeEnum> String getNameByCode(int code, Class<? extends CodeEnum> enumClass) {
+        if (enumClass != null) {
+
+            Optional<? extends CodeEnum> matchingEnum = Arrays.stream(enumClass.getEnumConstants())
+                    .filter(e -> e.getCode() == code)
+                    .findFirst();
+
+            return matchingEnum.map(CodeEnum::getName).orElse("");
+        }
+        return "";
     }
 }

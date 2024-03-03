@@ -1,0 +1,227 @@
+<div>
+  <div class="row sp-between">
+    <span class="dark-grey">총 [[${responseDto.total}]]건</span>
+    <div class="row">
+      <div>
+        <input
+                id="visible"
+                type="checkbox"
+                name="closed"
+                th:checked="${requestDto.closed}"
+        />
+        <label class="ml-quarter mr-1" for="visible">마감된 공고 포함</label>
+      </div>
+      <div class="relative mr-1" id="sort-box">
+        <div class="row">
+          <span class="grey-border w-100 py-half" id="sortBtn"
+                th:text="${requestDto.sortType == 'no' ? '최신등록순' : '마감임박순'}"></span >
+          <i class="fa-solid fa-caret-down" id="sortDropdownBtn"></i>
+        </div>
+        <div class="py-half grey-border hidden" id="sort-option-box">
+          <ul class="px-3quarter">
+            <li class="sort-option" data-text="no">최신등록순</li>
+            <li class="sort-option" data-text="deadline">마감임박순</li>
+          </ul>
+        </div>
+      </div>
+      <div class="relative" id="size-box">
+        <input type="hidden" id="size" name="size">
+        <div class="row">
+          <span class="grey-border w-100 py-half" id="sizeBtn">20개씩</span >
+          <i class="fa-solid fa-caret-down" id="sizeDropdownBtn"></i>
+        </div>
+        <div class="py-half grey-border hidden" id="size-option-box">
+          <ul class="px-3quarter">
+            <li class="size-option" data-num=20>20개씩</li>
+            <li class="size-option" data-num=30>30개씩</li>
+            <li class="size-option" data-num=40>40개씩</li>
+            <li class="size-option" data-num=50>50개씩</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div><!--end of sortType-->
+  <div class="py-1 mb-3" id="job-list-container">
+    <div class="row text-center py-1 bold">
+      <span class="w-10 px-1">지역</span>
+      <span class="w-50 px-1">공고제목/기업명</span>
+      <span class="w-10 px-1">경력</span>
+      <span class="w-15 px-1">학력</span>
+      <span class="w-15 px-1">마감일</span>
+    </div>
+    <div class="row text-center py-1" th:if="${responseDto.dtoList == null}">
+      <span class="w-100 px-1 word-break">등록된 공고가 없습니다.</span>
+    </div>
+    <div class="row text-center py-1" th:each="dto:${responseDto.dtoList}">
+      <span class="w-10 px-1 word-break">[[${dto.sigunguNames[0]}]]</span>
+      <div class="w-50 text-left col px-1">
+        <span class="medium-large">[[${dto.title}]]</span>
+        <span class="pt-half grey">[[${dto.companyName}]]</span>
+      </div>
+      <div class="w-10 px-1">
+        <div class="col">
+          <span th:if="${dto.exp}">경력</span>
+          <span class="pt-half" th:if="${dto.exp} and ${dto.expYear ne null}" th:text="${dto.expYear + '년 이상'}"></span>
+          <span th:unless="${dto.exp}">신입</span>
+        </div>
+      </div>
+      <div class="w-15 px-1" th:switch="${dto.edu}">
+        <span th:case="0">학력무관</span>
+        <span th:case="1">고등학교 <i class="fa-solid fa-arrow-up-long grey"></i></span>
+        <span th:case="2">대학(2,3년제) <i class="fa-solid fa-arrow-up-long grey"></i></span>
+        <span th:case="3">대학(4년제) <i class="fa-solid fa-arrow-up-long grey"></i></span>
+        <span th:case="4">석사 학위 <i class="fa-solid fa-arrow-up-long grey"></i></span>
+        <span th:case="5">박사 학위 <i class="fa-solid fa-arrow-up-long grey"></i></span>
+      </div>
+      <div class="w-15 px-1 col">
+        <div class="mb-half"><span class="bold small" th:id="'isClosed_' + ${dto.no}"></span></div>
+        <span th:id="'deadline_' + ${dto.no}"></span>
+      </div>
+      <script th:inline="javascript" th:src="@{/js/deadline.js}"></script>
+      <script th:inline="javascript">
+        checkDeadline([[${dto.no}]], [[${dto.deadline}]]);
+      </script>
+    </div>
+  </div><!--end of job list container-->
+  <div id="pagination" class="row h-center mb-5">
+    <span class="p-half m-half prevNext pointer pageBtn" th:if="${responseDto.prev}"
+          th:data-num="${responseDto.page - 5 < 1 ? 1 : responseDto.page - 5}">
+      <i class="fa-solid fa-chevron-left"></i>
+    </span>
+    <th:block th:each="i:${#numbers.sequence(responseDto.start, responseDto.end)}">
+      <span
+              th:if="${i > 0}"
+              th:class="${responseDto.page == i} ?
+              'p-half m-half pointer pageBtn active' : 'p-half m-half pointer pageBtn'"
+              th:data-num="${i}">[[${i}]]
+      </span>
+      <span th:unless="${i > 0}" class="'p-half m-half pointer pageBtn active" data-num="1">1</span>
+    </th:block>
+    <span class="p-half m-half prevNext pointer pageBtn" th:if="${responseDto.next}"
+          th:data-num="${responseDto.page + 5 > responseDto.last ? responseDto.last : responseDto.page + 5}">
+          <i class="fa-solid fa-angle-right"></i>
+        </span>
+  </div><!--end of pagination-->
+</div>
+
+<script>
+  // 변수 재선언
+  pageBtn = document.querySelectorAll(".pageBtn")             // 페이지 이동버튼 span
+
+  closedBtn = document.getElementById("visible");             // 마감된 공고 포함 input
+
+  sortBtn = document.getElementById("sortBtn");                 // 정렬방식 span
+  sortBox = document.getElementById("sort-box");
+  sortOptionArray = document.querySelectorAll(".sort-option")   // 정렬방식 li
+
+  sizeBtn = document.getElementById("sizeBtn");                 // 페이지당 글 개수 span
+  sizeBox = document.getElementById("size-box");
+  sizeOptionArray = document.querySelectorAll(".size-option")   // 페이지당 글 개수 li
+
+
+  /**
+   * 마감된 공고 포함 여부가 바뀌면 #closed를 수정하고 다시 검색한다.
+   */
+  closedBtn.addEventListener("change", function () {
+    document.getElementById("closed").checked = this.checked;
+    resetPageNum();
+    search();
+  });
+
+
+  /**
+   * 페이지 이동 버튼을 누르면 input#page에 data-num 값을 담고 다시 검색한다.
+   */
+  pageBtn.forEach(btn => {
+    btn.addEventListener("click", function () {
+      const pageInput = document.getElementById("page");
+      pageInput.value = btn.dataset.num;
+      search();
+    })
+  })
+
+
+  /**
+   span#sortBtn을 클릭하면 옵션 목록인 div#sort-option-box가 나타난다.
+   li.sort-option을 클릭하면 해당 텍스트가 span#sortBtn에 나타나고
+   data-text 값이 input#sortType에 저장된다.
+   옵션 목록은 다음과 같은 경우에 사라진다.
+   1. 마우스가 옵션 목록 바깥으로 벗어났을 때
+   2. 옵션이 선택 되었을 때
+   */
+  // span#sortBtn을 클릭하면 옵션 목록이 나타나게 한다.
+  sortBtn.addEventListener("click", function () {
+    let sortOptionBox = document.getElementById("sort-option-box");
+    sortOptionBox.classList.toggle("hidden");
+  })
+
+  // 옵션 목록 바깥으로 마우스가 벗어나면 옵션 목록을 숨긴다.
+  sortBox.addEventListener("mouseleave", function () {
+    let sortOptionBox = document.getElementById("sort-option-box");
+    sortOptionBox.classList.add("hidden");
+  })
+
+  // 각각의 옵션 li에 클릭이벤트를 연결한다.
+  sortOptionArray.forEach(option => {
+    option.addEventListener("click", function () {
+      // span#sortBtn의 텍스트를 수정한다.
+      sortBtn.textContent = this.textContent;
+      sortBtn.style.color = "#171717";
+
+      // input#sortType에 정렬 기준을 저장한다.
+      const sortType = document.getElementById("sortType");
+      sortType.value = this.dataset.text;
+      console.log(sortType.value)
+
+      // 옵션 목록 숨긴다.
+      let sortOptionBox = document.getElementById("sort-option-box");
+      sortOptionBox.classList.add("hidden");
+
+      resetPageNum();
+
+      search();
+    })
+  })
+
+
+  /**
+   span#sizeBtn을 클릭하면 옵션 목록인 div#size-option-box가 나타난다.
+   li.size-option을 클릭하면 해당 텍스트가 span#sizeBtn에 나타나고
+   data-num 값이 input#size에 저장된다.
+   옵션 목록은 다음과 같은 경우에 사라진다.
+   1. 마우스가 옵션 목록 바깥으로 벗어났을 때
+   2. 옵션이 선택 되었을 때
+   */
+  // span#sizeBtn을 클릭하면 옵션 목록이 나타나게 한다.
+  sizeBtn.addEventListener("click", function () {
+    let sizeOptionBox = document.getElementById("size-option-box");
+    sizeOptionBox.classList.toggle("hidden");
+  })
+
+  // 옵션 목록 바깥으로 마우스가 벗어나면 옵션 목록을 숨긴다.
+  sizeBox.addEventListener("mouseleave", function () {
+    let sizeOptionBox = document.getElementById("size-option-box");
+    sizeOptionBox.classList.add("hidden");
+  })
+
+  // 각각의 옵션 li에 클릭이벤트를 연결한다.
+  sizeOptionArray.forEach(option => {
+    option.addEventListener("click", function () {
+      // span#sizeBtn의 텍스트를 수정한다.
+      sizeBtn.textContent = this.textContent;
+      sizeBtn.style.color = "#171717";
+
+      // input#size에 정렬 기준을 저장한다.
+      const size = document.getElementById("size");         // 최종학력 input
+      size.value = this.dataset.num;
+
+      // 옵션 목록 숨긴다.
+      let sizeOptionBox = document.getElementById("size-option-box");
+      sizeOptionBox.classList.add("hidden");
+
+      resetPageNum();
+
+      search();
+    })
+  })
+</script>

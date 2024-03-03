@@ -1,12 +1,14 @@
 package com.portfolio.goodjobs.repository.search;
 
 import com.portfolio.goodjobs.domain.Job;
+import com.portfolio.goodjobs.domain.JobLocation;
 import com.portfolio.goodjobs.domain.QJob;
 import com.portfolio.goodjobs.domain.QJobLocation;
 import com.portfolio.goodjobs.dto.JobListDto;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -20,6 +22,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class JobSearchImpl extends QuerydslRepositorySupport implements JobSearch {
 
@@ -44,9 +47,13 @@ public class JobSearchImpl extends QuerydslRepositorySupport implements JobSearc
 
         // 키워드 검색
         if (keyword != null && !keyword.isEmpty()) {
-            booleanBuilder.or(job.title.containsIgnoreCase(keyword));
-            booleanBuilder.or(job.companyName.containsIgnoreCase(keyword));
-            booleanBuilder.or(job.detail.containsIgnoreCase(keyword));
+            String[] keywords = keyword.split("\\s+");
+
+            for (String kw : keywords) {
+                booleanBuilder.or(job.title.containsIgnoreCase(kw));
+                booleanBuilder.or(job.companyName.containsIgnoreCase(kw));
+                booleanBuilder.or(job.detail.containsIgnoreCase(kw));
+            }
         }
 
         // 채용중인 공고 검색
@@ -56,17 +63,13 @@ public class JobSearchImpl extends QuerydslRepositorySupport implements JobSearc
         }
 
         jobJPQLQuery.where(booleanBuilder);
-        jobJPQLQuery.groupBy(job);
 
         Objects.requireNonNull(getQuerydsl()).applyPagination(pageable, jobJPQLQuery);
 
         List<Job> jobList = jobJPQLQuery.fetch();
 
-        Long count = Optional.ofNullable(jobJPQLQuery.select(job.no.count())
-                .from(job)
-                .fetchFirst())
-                .orElse(0L);
+        long totalCount = jobJPQLQuery.fetchCount();
 
-        return new PageImpl<>(jobList, pageable, count);
+        return new PageImpl<>(jobList, pageable, totalCount);
     }
 }

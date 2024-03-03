@@ -1,6 +1,8 @@
 package com.portfolio.goodjobs.enums.sigungu;
 
-public enum Seoul {
+import com.portfolio.goodjobs.enums.CodeEnum;
+
+public enum Seoul implements CodeEnum {
 
     GANGNAM("강남구", 11680),
     GANGDONG("강동구", 11740),
@@ -36,10 +38,12 @@ public enum Seoul {
         this.code = code;
     }
 
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
     public int getCode() {
         return code;
     }

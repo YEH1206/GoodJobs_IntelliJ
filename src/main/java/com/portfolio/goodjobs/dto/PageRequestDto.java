@@ -24,9 +24,11 @@ public class PageRequestDto {
     @Builder.Default
     private int size = 20;              // 페이지 당 채용공고 개수
 
-    private String location;           // 검색할 지역 리스트 (구분자:+)
+    @Builder.Default
+    private String location = "";           // 검색할 지역 리스트 (구분자:+)
 
-    private String keyword;             // 검색 키워드
+    @Builder.Default
+    private String keyword = "";             // 검색 키워드
 
     @Builder.Default
     private boolean closed = false;       // 마감된 공고 검색 여부 (T:포함, F:제외)

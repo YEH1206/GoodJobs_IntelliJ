@@ -6,12 +6,13 @@
 </head>
 <div layout:fragment="content">
   <h1>채용공고 등록하기</h1>
+  [[${jobDto}]]
   <form action="/job/register" id="registerForm" method="post">
     <div class="row px-3 py-2 grey-border mb-3 sp-evenly" id="companyInfoBox">
       <div id="logo-box" class="relative vh-center">
-        <img alt="회사 로고 이미지" id="logo-thumbnail" th:src="@{/assets/logo-default.png}" />
-        <label for="logo" id="camera-box"><input id="logo" type="file"/><i class="fa-solid fa-camera"></i></label>
         <div id="logo-file-name"></div>
+        <img alt="회사 로고 이미지" id="logo-thumbnail" th:src="@{/assets/logo-default.png}" />
+        <label for="logo" id="camera-box"><input id="logo" type="file" /><i class="fa-solid fa-camera"></i></label>
       </div>
       <div class="info-box pl-3 flex-col sp-between w-75">
         <div class="bold large mb-half"><span>회사명</span></div>
@@ -237,7 +238,7 @@
       </button>
     </div>
   </form>
-  <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+  <script src="http://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script src="/js/upload.js"></script>
 </div><!--end of layout fragment content-->

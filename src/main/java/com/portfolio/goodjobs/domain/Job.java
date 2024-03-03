@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Future;
 import lombok.*;
 import org.hibernate.annotations.BatchSize;
+import org.springframework.cglib.core.Local;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -50,7 +51,7 @@ public class Job extends BaseEntity{
 
     @OneToMany(mappedBy = "job", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY, orphanRemoval = true)
     @Builder.Default
-    //@BatchSize(size = 20)
+    @BatchSize(size = 20)
     private Set<JobLocation> locationSet = new HashSet<>();
 
     @Column(columnDefinition = "TEXT", nullable = false)

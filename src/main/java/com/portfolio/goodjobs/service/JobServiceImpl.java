@@ -51,7 +51,7 @@ public class JobServiceImpl implements JobService {
 
         Job job = result.orElseThrow();
 
-        return entityToDto(job);
+        return entityToDto(job, JobDto.class);
     }
 
     @Override
@@ -64,7 +64,7 @@ public class JobServiceImpl implements JobService {
         Pageable pageable = pageRequestDto.getPageable();
 
         Page<Job> result = jobRepository.searchAll(locations, keyword, closed, pageable);
-        List<JobListDto> dtoList = result.getContent().stream().map(this::entityToListDto).toList();
+        List<JobListDto> dtoList = result.getContent().stream().map(job -> entityToDto(job, JobListDto.class)).toList();
 
         return PageResponseDto.<JobListDto>withAll()
                 .pageRequestDto(pageRequestDto)
