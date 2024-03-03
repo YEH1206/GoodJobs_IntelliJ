@@ -50,9 +50,10 @@ public class JobSearchImpl extends QuerydslRepositorySupport implements JobSearc
             String[] keywords = keyword.split("\\s+");
 
             for (String kw : keywords) {
-                booleanBuilder.or(job.title.containsIgnoreCase(kw));
-                booleanBuilder.or(job.companyName.containsIgnoreCase(kw));
-                booleanBuilder.or(job.detail.containsIgnoreCase(kw));
+                booleanBuilder.and(
+                        job.title.containsIgnoreCase(kw)
+                                .or(job.companyName.containsIgnoreCase(kw))
+                                .or(job.detail.containsIgnoreCase(kw)));
             }
         }
 

@@ -25,7 +25,7 @@
 <div id="header-container">
   <div class="header-row sp-between resolution-65">
     <div class="row">
-      <a href=""><img th:src="@{/assets/main-logo.png}" alt="굿잡스 로고" /></a>
+      <a th:href="@{/job/list}"><img th:src="@{/assets/main-logo.png}" alt="굿잡스 로고" /></a>
       <div class="ml-2" id="search-container">
         <form action="/job/list" id="search-form">
           <div class="row">
@@ -59,7 +59,7 @@
     </div>
   </div>
   <div class="header-row resolution-65">
-    <a href="" id="first-menu">채용정보</a>
+    <a th:href="@{/job/list}" id="first-menu">채용정보</a>
     <div class="drop-btn">
       <button type="button" class="menu subnav-btn">회원서비스</button>
       <div class="subnav-content">
@@ -72,7 +72,7 @@
           </div>
           <div class="w-25">
             <h1>기업 서비스</h1>
-            <div><a href="">공고등록</a></div>
+            <div><a th:href="@{/job/register}">공고등록</a></div>
             <div><a href="">공고관리</a></div>
           </div>
         </div>
@@ -97,7 +97,7 @@
         <div class="resolution-65 flex">
           <div class="w-25">
             <h1>기업 서비스</h1>
-            <div><a href="">공고등록</a></div>
+            <div><a th:href="@{/job/register}">공고등록</a></div>
             <div><a href="">공고관리</a></div>
           </div>
         </div>
