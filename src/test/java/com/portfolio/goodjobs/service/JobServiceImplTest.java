@@ -137,7 +137,7 @@ class JobServiceImplTest {
         return ThreadLocalRandom.current().nextInt(1, 31);
     }
 
-    private static @Min(value = 0, message = "경력기간은 0보다 작을 수 없습니다.") short getRandomIndex(int size) {
+    private static short getRandomIndex(int size) {
         return (byte) ThreadLocalRandom.current().nextInt(size);
     }
 }
