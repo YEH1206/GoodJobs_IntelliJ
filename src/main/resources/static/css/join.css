@@ -1,0 +1,40 @@
+#section-container {
+    background-color: #f8f8f8;
+}
+
+.white-background {
+    background-color: white;
+}
+
+#form-container {
+    border-top: 2px solid #171717;
+}
+
+#join-form label {
+    font-weight: bold;
+}
+
+#join-form input {
+    padding: 8px 12px;
+    height: 2.5rem;
+    border: 1px solid #d2d2d2;
+    border-radius: 8px;
+}
+
+#join-form input[type="button"] {
+    background-color: #ff501b;
+    border: 1px solid #ff501b;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#registerBtn {
+    border: 1px solid #ff501b;
+    background-color: #ff501b;
+    border-radius: 8px;
+    padding: 16px 24px;
+    margin: 16px 0;
+    color: white;
+    font-weight: bold;
+}

@@ -3,6 +3,7 @@ package com.portfolio.goodjobs.domain;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Future;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.BatchSize;
 import org.springframework.cglib.core.Local;
 
@@ -13,7 +14,7 @@ import java.util.Set;
 
 @Entity
 @Getter
-@Builder
+@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString(exclude = "locationSet")

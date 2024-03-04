@@ -1,0 +1,43 @@
+#section-container {
+    background-color: #f8f8f8;
+}
+
+.white-background {
+    background-color: white;
+}
+
+.login-input {
+    padding: 0 16px 0 32px;
+    border: 1px solid #d2d2d2;
+    height: 3rem;
+    border-radius: 8px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+.relative i {
+    position: absolute;
+    left: 12px;
+    color: #6a6a6a;
+}
+
+#loginBtn {
+    height: calc(6rem + 16px);
+    margin-left: 16px;
+    width: calc(6rem + 16px);
+    border: 1px solid #ff501b;
+    background-color: #ff501b;
+    font-weight: bold;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.125rem;
+}
+
+#left-container {
+    height: 12rem;
+}
+
+.right-border {
+    border-right: 1px solid #d2d2d2;
+}

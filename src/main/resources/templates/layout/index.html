@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -54,13 +55,13 @@
       </div>
     </div>
     <div>
-      <a href="" class="header-grey">로그인</a
-      ><a href="" class="ml-1 header-grey">회원가입</a>
+      <a th:unless="${#authorization.expression('isAuthenticated()')}" href="/member/login" class="header-grey">로그인 / 회원가입</a>
+      <a th:if="${#authorization.expression('isAuthenticated()')}" href="/logout" class="header-grey">로그아웃</a>
     </div>
   </div>
   <div class="header-row resolution-65">
     <a th:href="@{/job/list}" id="first-menu">채용정보</a>
-    <div class="drop-btn">
+    <div class="drop-btn" th:unless="${#authorization.expression('isAuthenticated()')}">
       <button type="button" class="menu subnav-btn">회원서비스</button>
       <div class="subnav-content">
         <div class="resolution-65 flex">
@@ -78,7 +79,7 @@
         </div>
       </div>
     </div>
-    <div class="drop-btn">
+    <div class="drop-btn" sec:authorize="hasRole('ROLE_PERSONAL')">
       <button type="button" class="menu subnav-btn">개인서비스</button>
       <div class="subnav-content">
         <div class="resolution-65 flex">
@@ -91,7 +92,7 @@
         </div>
       </div>
     </div>
-    <div class="drop-btn">
+    <div class="drop-btn" sec:authorize="hasRole('ROLE_CORPORATE')">
       <button type="button" class="menu subnav-btn">기업서비스</button>
       <div class="subnav-content">
         <div class="resolution-65 flex">
@@ -115,6 +116,7 @@
 </div>
 
 <script>
+
   const searchForm = document.getElementById("search-form");
   const searchBtn = document.getElementById("searchButton");
   const searchInput = document.getElementById("keyword");
@@ -143,7 +145,6 @@
 
 </script>
 <th:block layout:fragment="script">
-
 </th:block>
 </body>
 </html>

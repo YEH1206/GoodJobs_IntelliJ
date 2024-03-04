@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="ko" layout:decorate="~{layout/index.html}" xmlns="http://www.w3.org/1999/html"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
   <title>GOOD JOBS | 채용공고 등록</title>
 </head>
 <div layout:fragment="content">
   <h1>채용공고 등록하기</h1>
-  [[${jobDto}]]
   <form action="/job/register" id="registerForm" method="post">
     <div class="row px-3 py-2 grey-border mb-3 sp-evenly" id="companyInfoBox">
       <div id="logo-box" class="relative vh-center">
@@ -15,17 +15,17 @@
         <label for="logo" id="camera-box"><input id="logo" type="file" /><i class="fa-solid fa-camera"></i></label>
       </div>
       <div class="info-box pl-3 flex-col sp-between w-75">
-        <div class="bold large mb-half"><span>회사명</span></div>
+        <div class="bold large mb-half"><span th:text="${companyName}"></span></div>
         <input
                 id="companyName"
                 name="companyName"
                 type="hidden"
-                value="회사명"
+                th:value="${companyName}"
         />
         <div class="mb-1">
           <div class="error-msg writer companyName"></div>
         </div>
-        <input id="writer" name="writer" type="hidden" value="아이디"/>
+        <input id="writer" name="writer" type="hidden" th:value="${id}"/>
         <div>
           <div class="row mt-1 mb-3quarter">
             <span class="bold large">주소</span><span class="red-star">*</span>

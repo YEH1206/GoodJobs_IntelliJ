@@ -184,7 +184,6 @@
   function sigunguList(sidoName) {
     axios.get(`/job/sigunguList?sidoName=${sidoName}`)
             .then(response => {
-              console.log(response.data);
               const sigunguBox = document.getElementById("sigungu-box");
               const sigunguList = response.data;
               sigunguBox.innerHTML = '';
@@ -469,7 +468,6 @@
       }
     })
             .then(function (response) {
-              console.log(response)
               document.getElementById("template").innerHTML = response.data;
 
               // 마감일 계산을 위한 script 실행

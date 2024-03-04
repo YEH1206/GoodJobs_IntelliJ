@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/index.html}" >
+<head>
+  <link rel="stylesheet" th:href="@{/css/login.css}" />
+  <title>GOOD JOBS | 로그인</title>
+</head>
+<div layout:fragment="content">
+  <form id="login-form" action="/member/login" method="post">
+    <div class="p-3 ">
+      <div class="col v-center white-background p-3">
+        <div class="w-50 pb-3"><img th:src="@{/assets/login-logo.svg}" alt="굿잡스 로고"></div>
+        <div class="row">
+          <div class="col sp-between" id="left-container">
+            <div class="row px-1">
+              <div class="col">
+                <div class="relative vh-center">
+                  <input type="text" id="username" name="username" class="login-input" placeholder="아이디">
+                  <label for="username" class="hidden">아이디</label>
+                  <i class="fa-solid fa-user"></i>
+                </div>
+                <div class="relative vh-center">
+                  <input type="password" id="password" name="password" class="login-input" placeholder="비밀번호">
+                  <label for="password" class="hidden">비밀번호</label>
+                  <i class="fa-solid fa-lock"></i>
+                </div>
+              </div>
+              <div>
+                <input type="button" id="loginBtn" value="로그인">
+              </div>
+            </div>
+            <div class="row vh-center">
+              <span><a th:href="@{/member/join/personal}" class="dark-grey small px-half right-border">개인 회원가입</a></span>
+              <span><a th:href="@{/member/join/corporate}" class="dark-grey small px-half">기업 회원가입</a></span>
+            </div><!--end of left container-->
+          </div>
+          <div class="px-1">
+            <div><img th:src="@{/assets/login-ad.png}" alt="광고"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+<script layout:fragment="script" th:inline="javascript">
+
+  // 로그인 실패 시 alert를 띄운다.
+  let error = [[${error}]];
+  if (error) {
+    alert(error);
+  }
+
+  // 변수 선언
+  const loginForm = document.getElementById("login-form");
+  const inputs = document.querySelectorAll('.login-input');
+  const loginBtn = document.getElementById('loginBtn');
+
+
+  // 로그인 버튼에 클릭 이벤트 연결
+  loginBtn.addEventListener("click", login);
+  function login() {
+    // 아이디, 비밀번호 입력 여부를 겁사한다.
+    const isNullOrEmpty = Array
+            .from(inputs)
+            .find(input => input.value.trim() === "");
+
+    if(isNullOrEmpty) {
+      alert("아이디와 비밀번호를 입력해주세요.");
+      return false;
+    }
+    loginForm.submit();
+  }
+
+  // 비밀번호 input에 엔터 이벤트를 연결한다.
+  document.getElementById("password").addEventListener("keydown", function (event) {
+    if(event.key === "Enter") {
+      event.preventDefault();
+      event.stopPropagation();
+      login();
+    }
+  })
+
+</script>

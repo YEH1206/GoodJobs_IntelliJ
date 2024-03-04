@@ -4,7 +4,10 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -14,9 +17,12 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 
-@MappedSuperclass
-@EntityListeners(value = AuditingEntityListener.class)
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@MappedSuperclass
+@EntityListeners(value = {AuditingEntityListener.class})
+@SuperBuilder
 public class BaseEntity {
 
     /*

@@ -1,19 +1,20 @@
 package com.portfolio.goodjobs.controller;
 
-import com.portfolio.goodjobs.dto.JobDto;
-import com.portfolio.goodjobs.dto.JobListDto;
-import com.portfolio.goodjobs.dto.PageRequestDto;
-import com.portfolio.goodjobs.dto.PageResponseDto;
+import com.portfolio.goodjobs.dto.*;
 import com.portfolio.goodjobs.enums.Sido;
 import com.portfolio.goodjobs.enums.sigungu.Gyeonggi;
 import com.portfolio.goodjobs.enums.sigungu.Seoul;
+import com.portfolio.goodjobs.service.CorporateInfoService;
 import com.portfolio.goodjobs.service.JobService;
+import com.portfolio.goodjobs.service.MemberService;
 import jakarta.validation.Valid;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -30,16 +31,19 @@ import java.util.List;
 @Log4j2
 public class JobController {
 
+    private final CorporateInfoService corporateInfoService;
+
     private final JobService jobService;
 
-    @GetMapping("/index")
-    public String temp() {
-        System.out.println("job index .......................");
-        return "layout/index";
-    }
-
     @GetMapping("/register")
-    public void registerGET(PageRequestDto pageRequestDto, Model model) {
+    public void registerGET(PageRequestDto pageRequestDto, Model model, RedirectAttributes redirectAttributes) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String id = authentication.getName();
+
+        CorporateInfoDto corporateInfoDto = corporateInfoService.getCorporateInfo(id);
+
+        model.addAttribute("id", corporateInfoDto.getId());
+        model.addAttribute("companyName", corporateInfoDto.getCompanyName());
         model.addAttribute("sidoList", Sido.values());
         model.addAttribute("requestDto", pageRequestDto);
     }

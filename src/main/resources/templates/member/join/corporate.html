@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/index.html}" >
+<head>
+  <link rel="stylesheet" th:href="@{/css/join.css}" />
+  <title>GOOD JOBS | 기업회원 가입</title>
+</head>
+<div layout:fragment="content">
+  <div class="vh-center">
+    <div class="w-60">
+      <h1>기업 회원가입</h1>
+      <div id="form-container" class="white-background px-2 py-3 mb-5">
+        <form action="/member/join/corporate" method="post" id="join-form">
+          <div class="row mb-2">
+            <div class="w-30"><label for="id">아이디<span class="red-star"> *</span></label></div>
+              <div class="col w-70">
+                <div class="flex sp-between">
+                  <input type="text" id="id" name="id" class="w-75 mr-half" placeholder="아이디">
+                  <input type="button" id="checkId" value="중복확인" class="w-25">
+                  <input type="hidden" id="validId" name="validId">
+                </div>
+                <div class="error-msg id"></div>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <div class="w-30"><label for="pw">비밀번호<span class="red-star"> *</span></label></div>
+            <div class="col w-70">
+              <div class="flex w-100">
+                <input type="password" id="pw" name="pw" class="w-100"
+                       placeholder="영문자, 숫자, 특수문자를 포함한 8~16자">
+              </div>
+              <div class="error-msg pw"></div>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <div class="w-30"><label for="email">이메일<span class="red-star"> *</span></label></div>
+            <div class="col w-70">
+              <div class="flex w-100">
+                <input type="text" id="email" name="email" class="w-100" placeholder="example@email.com">
+              </div>
+              <div class="error-msg email"></div>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <div class="w-30"><label for="companyName">회사/점포명<span class="red-star"> *</span></label></div>
+            <div class="col w-70">
+              <div class="flex w-100">
+                <input type="text" id="companyName" name="companyName" class="w-100" placeholder="회사/점포명">
+              </div>
+              <div class="error-msg companyName"></div>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <div class="w-30"><label for="regNum">사업자등록번호<span class="red-star"> *</span></label></div>
+            <div class="col w-70">
+              <div class="flex sp-between">
+                <input type="text" id="regNum" name="regNum" class="w-75 mr-half"
+                       placeholder="숫자만 입력해주세요.">
+                <input type="button" id="checkRegNum" value="인증" class="w-25">
+                <input type="hidden" id="validRegNum" name="validRegNum">
+              </div>
+              <div class="error-msg regNum"></div>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <div class="w-30"><label for="ceo">대표자명<span class="red-star"> *</span></label></div>
+            <div class="col w-70">
+              <div class="flex w-100">
+                <input type="text" id="ceo" name="ceo" class="w-100" placeholder="대표자명">
+              </div>
+              <div class="error-msg ceo"></div>
+            </div>
+          </div>
+          <div class="h-center">
+            <button type="button" class="registerBtn" id="registerBtn">가입하기</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+          integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</div>
+
+<script layout:fragment="script" th:inline="javascript">
+
+  /**
+   * 아이디 유효성 검사
+   */
+  // 변수 선언
+  const checkIdBtn = document.querySelector("#checkId");
+
+  // 아이디 중복 검사 버튼에 클릭 이벤트를 연결한다.
+  checkIdBtn.addEventListener("click", function () {
+    const idInput = document.querySelector("#id");
+    const idRegex = /^[a-z0-9_]{5,15}$/;
+
+    // 아이디 형식 검사
+    if (!idRegex.test(idInput.value)) {
+      alert('아이디는 알파벳 소문자와 숫자만 가능합니다. (5~15글자)')
+      idInput.focus();
+      return;
+    }
+
+    // 중복 검사
+    checkId(idInput.value).then(() => {
+      $('#validId').val('true');
+      $('#checkId').val('사용가능').css({
+        'background-color': '#04aa6d',
+        'border': '1px solid #04aa6d',
+        'cursor': 'default'
+      });
+    }).catch(e => {
+      alert(e.response.data);
+    })
+  }, false)
+
+  async function checkId(idInput) {
+    const response = await axios.get(`/member/checkId/${idInput}`);
+    return response.data;
+  }
+
+  // 아이디가 수정되는 경우, 기존 인증 상태 초기화
+  const idInput = document.querySelector("#id");
+  idInput.addEventListener('input', function () {
+    $('#validId').val('false');
+    $('#checkId').val('중복확인')
+            .css({
+              'background-color': '#ff501b',
+              'border': '1px solid #ff501b',
+              'cursor': 'pointer'
+            })
+  })
+
+
+  /**
+   * 사업자등록번호 유효성 검사
+   */
+  // 사업자등록번호는 숫자만 입력되도록 제한한다.
+  const regNumInput = document.querySelector("#regNum");
+  regNumInput.addEventListener("input", function () {
+    regNumInput.value = regNumInput.value.replace(/\D/g, '').substring(0, 10);
+  })
+
+  // 사업자등록번호 인증
+  const validateBtn = document.querySelector("#checkRegNum");
+  const validRegNum = document.querySelector("#validRegNum");
+
+  validateBtn.addEventListener("click", function () {
+    const regNum = regNumInput.value;
+    const data = {
+      "b_no": [regNum]
+    };
+
+    $.ajax({
+      url: "https://api.odcloud.kr/api/nts-businessman/v1/status?" +
+              "serviceKey=fgY0uRegDaO476UCtz64%2Bw7B9b1vMYN77Xvd2s%2BcV%2Fv0" +
+              "vnQZBKb9bSLdFOjxhg9fZgBjHMwyAMvagMKmooEpRw%3D%3D",
+      type: "POST",
+      data: JSON.stringify(data), // json 을 string으로 변환하여 전송
+      dataType: "JSON",
+      contentType: "application/json",
+      accept: "application/json",
+      success: function(result) {
+        if(result.data[0]['b_stt_cd'] === '01' || result.data[0]['b_stt_cd'] === '02') { // 01:계속사업자, 02:휴업자
+          // 사업자 인증이 완료되면 인증버튼 수정
+          $('#checkRegNum').val('완료').css({
+            'background-color': '#04aa6d',
+            'border': '1px solid #04aa6d',
+            'cursor': 'default'
+          });
+          $('#validRegNum').val('true');
+        }
+      },
+      error: function(result) {
+        console.log(result.responseText); //responseText의 에러메세지 확인
+      }
+    });
+  })
+
+  // 사업자등록번호가 수정되는 경우, 기존 인증 상태 초기화
+  regNumInput.addEventListener('input', function () {
+    validRegNum.value = false;
+    validateBtn.value = '인증';
+    validateBtn.style.backgroundColor = '#ff501b';
+    validateBtn.style.border = '1px solid #ff501b';
+    validateBtn.style.cursor = 'pointer';
+  })
+
+
+  /**
+   * 폼 데이터 전송하기 전 유효성 검사
+   */
+  const registerBtn = document.querySelector("#registerBtn");
+
+  registerBtn.addEventListener("click", function () {
+    const inputFields = document.querySelectorAll('#join-form input');
+    let target;
+
+    // 필수 입력 항목이 null 이거나 공백이면 전송하지 않는다.
+    for(let i = 0; i < inputFields.length; i++) {
+      const value = inputFields[i].value.trim();
+
+      if(value === null || value === '') {
+        target = inputFields[i];
+        console.log(target)
+        alert('필수 항목을 입력해주세요.');
+        break;
+      }
+    }
+    if(target) {
+      target.focus();
+      return;
+    }
+
+    // 아이디 형식 검사
+    const idRegex = /^[a-z0-9_]{5,15}$/;
+    const idInput = $('#id')
+    if (!idRegex.test(idInput.val())) {
+      alert('아이디는 알파벳 소문자와 숫자만 가능합니다. (5~15글자)')
+      idInput.focus();
+      return;
+    }
+
+    // 비밀번호 형식 검사
+    const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,16}$/;
+    const pwInput = $('#pw')
+    if (!passwordRegex.test(pwInput.val())) {
+      alert('비밀번호는 영문자, 숫자, 특수문자(!@#$%^&*)를 포함해야 합니다.\n(8~16글자)')
+      pwInput.focus();
+      return;
+    }
+
+    // 이메일 형식 검사
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    const emailInput = $('#email')
+    if (!emailRegex.test(emailInput.val())) {
+      alert('유효하지 않은 이메일 형식입니다.')
+      emailInput.focus();
+      return;
+    }
+
+    document.getElementById('join-form').submit();
+  })
+
+</script>
