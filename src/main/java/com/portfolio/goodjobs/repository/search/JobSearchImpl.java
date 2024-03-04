@@ -51,12 +51,16 @@ public class JobSearchImpl extends QuerydslRepositorySupport implements JobSearc
         if (keyword != null && !keyword.isEmpty()) {
             String[] keywords = keyword.split("\\s+");
 
+            BooleanBuilder keywordBoolean = new BooleanBuilder();
+
             for (String kw : keywords) {
-                booleanBuilder.and(
+                keywordBoolean.or(
                         job.title.containsIgnoreCase(kw)
                                 .or(job.companyName.containsIgnoreCase(kw))
                                 .or(job.detail.containsIgnoreCase(kw)));
             }
+
+            booleanBuilder.and(keywordBoolean);
         }
 
         // 채용중인 공고 검색
