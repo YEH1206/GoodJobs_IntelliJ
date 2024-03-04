@@ -76,6 +76,9 @@ public class JobController {
     @GetMapping("/list")
     public void list(PageRequestDto pageRequestDto, Model model) {
         PageResponseDto<JobListDto> responseDto = jobService.jobList(pageRequestDto);
+        log.info("list test......");
+        log.info(pageRequestDto);
+        log.info(responseDto.toString());
         model.addAttribute("sidoList", Sido.values());
         model.addAttribute("requestDto", pageRequestDto);
         model.addAttribute("responseDto", responseDto);

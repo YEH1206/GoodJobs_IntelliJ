@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/index.html}" >
 <head>
   <title>GOOD JOBS</title>
@@ -29,112 +30,64 @@
       </div>
     </div>
   </div><!-- end of 근무지역 -->
-  <div id="template">
-    <div>
-      <div class="row sp-between">
-        <span class="dark-grey">총 [[${responseDto.total}]]건</span>
+  <div class="row sp-between">
+    <span class="dark-grey">총 [[${responseDto.total}]]건</span>
+    <div class="row">
+      <div>
+        <input
+                id="visible"
+                class="visible"
+                type="checkbox"
+                th:checked="${requestDto.closed}"
+        />
+        <label class="ml-quarter mr-1" for="visible" >마감된 공고 포함</label>
+      </div>
+      <div class="relative mr-1" id="sort-box">
         <div class="row">
-          <div>
-            <input
-                    id="visible"
-                    class="visible"
-                    type="checkbox"
-                    th:checked="${requestDto.closed}"
-            />
-            <label class="ml-quarter mr-1" for="visible" >마감된 공고 포함</label>
-          </div>
-          <div class="relative mr-1" id="sort-box">
-            <div class="row">
           <span class="grey-border w-100 py-half" id="sortBtn"
                 th:text="${requestDto.sortType == 'no' ? '최신등록순' : '마감임박순'}"></span >
-              <i class="fa-solid fa-caret-down" id="sortDropdownBtn"></i>
-            </div>
-            <div class="py-half grey-border hidden" id="sort-option-box">
-              <ul class="px-3quarter">
-                <li class="sort-option" data-text="no">최신등록순</li>
-                <li class="sort-option" data-text="deadline">마감임박순</li>
-              </ul>
-            </div>
-          </div>
-          <div class="relative" id="size-box">
-            <div class="row">
-              <span class="grey-border w-100 py-half" id="sizeBtn">20개씩</span >
-              <i class="fa-solid fa-caret-down" id="sizeDropdownBtn"></i>
-            </div>
-            <div class="py-half grey-border hidden" id="size-option-box">
-              <ul class="px-3quarter">
-                <li class="size-option" data-num=20>20개씩</li>
-                <li class="size-option" data-num=30>30개씩</li>
-                <li class="size-option" data-num=40>40개씩</li>
-                <li class="size-option" data-num=50>50개씩</li>
-              </ul>
-            </div>
-          </div>
+          <i class="fa-solid fa-caret-down" id="sortDropdownBtn"></i>
         </div>
-      </div><!--end of sortType-->
-      <div class="py-1 mb-3" id="job-list-container">
-        <div class="row text-center py-1 bold">
-          <span class="w-10 px-1">지역</span>
-          <span class="w-50 px-1">공고제목/기업명</span>
-          <span class="w-10 px-1">경력</span>
-          <span class="w-15 px-1">학력</span>
-          <span class="w-15 px-1">마감일</span>
+        <div class="py-half grey-border hidden" id="sort-option-box">
+          <ul class="px-3quarter">
+            <li class="sort-option" data-text="no">최신등록순</li>
+            <li class="sort-option" data-text="deadline">마감임박순</li>
+          </ul>
         </div>
-        <div class="row text-center py-1" th:if="${responseDto.dtoList == null}">
-          <span class="w-100 px-1 word-break">등록된 공고가 없습니다.</span>
+      </div>
+      <div class="relative" id="size-box">
+        <div class="row">
+          <span class="grey-border w-100 py-half" id="sizeBtn">20개씩</span >
+          <i class="fa-solid fa-caret-down" id="sizeDropdownBtn"></i>
         </div>
-        <div class="row text-center py-1" th:each="dto:${responseDto.dtoList}">
-          <span class="w-10 px-1 word-break">[[${dto.sigunguNames[0]}]]</span>
-          <div class="w-50 text-left col px-1">
-            <span class="medium-large">[[${dto.title}]]</span>
-            <span class="pt-half grey">[[${dto.companyName}]]</span>
-          </div>
-          <div class="w-10 px-1">
-            <div class="col">
-              <span th:if="${dto.exp}">경력</span>
-              <span class="pt-half" th:if="${dto.exp} and ${dto.expYear ne null}" th:text="${dto.expYear + '년 이상'}"></span>
-              <span th:unless="${dto.exp}">신입</span>
-            </div>
-          </div>
-          <div class="w-15 px-1" th:switch="${dto.edu}">
-            <span th:case="0">학력무관</span>
-            <span th:case="1">고등학교 <i class="fa-solid fa-arrow-up-long grey"></i></span>
-            <span th:case="2">대학(2,3년제) <i class="fa-solid fa-arrow-up-long grey"></i></span>
-            <span th:case="3">대학(4년제) <i class="fa-solid fa-arrow-up-long grey"></i></span>
-            <span th:case="4">석사 학위 <i class="fa-solid fa-arrow-up-long grey"></i></span>
-            <span th:case="5">박사 학위 <i class="fa-solid fa-arrow-up-long grey"></i></span>
-          </div>
-          <div class="w-15 px-1 col">
-            <div class="mb-half"><span class="bold small" th:id="'isClosed_' + ${dto.no}"></span></div>
-            <span th:id="'deadline_' + ${dto.no}"></span>
-          </div>
-          <script th:inline="javascript" th:src="@{/js/deadline.js}"></script>
-          <script th:inline="javascript">
-            checkDeadline([[${dto.no}]], [[${dto.deadline}]]);
-          </script>
+        <div class="py-half grey-border hidden" id="size-option-box">
+          <ul class="px-3quarter">
+            <li class="size-option" data-num=20>20개씩</li>
+            <li class="size-option" data-num=30>30개씩</li>
+            <li class="size-option" data-num=40>40개씩</li>
+            <li class="size-option" data-num=50>50개씩</li>
+          </ul>
         </div>
-      </div><!--end of job list container-->
-      <div id="pagination" class="row h-center mb-5">
-        <span class="p-half m-half prevNext pointer pageBtn" th:if="${responseDto.prev}"
-              th:data-num="${responseDto.page - 5 < 1 ? 1 : responseDto.page - 5}">
-          <i class="fa-solid fa-chevron-left"></i>
-        </span>
-        <th:block th:each="i:${#numbers.sequence(responseDto.start, responseDto.end)}">
-          <span
-                  th:if="${i > 0}"
-                  th:class="${responseDto.page == i} ?
-              'p-half m-half pointer pageBtn active' : 'p-half m-half pointer pageBtn'"
-                  th:data-num="${i}">[[${i}]]
-          </span>
-          <span th:unless="${i > 0}" class="'p-half m-half pointer pageBtn active" data-num="1">1</span>
-        </th:block>
-        <span class="p-half m-half prevNext pointer pageBtn" th:if="${responseDto.next}"
-              th:data-num="${responseDto.page + 5 > responseDto.last ? responseDto.last : responseDto.page + 5}">
-          <i class="fa-solid fa-angle-right"></i>
-        </span>
-      </div><!--end of pagination-->
+      </div>
     </div>
-  </div><!--end of template-->
+  </div><!--end of sortType-->
+  <div class="py-1 mb-3" id="job-list-container">
+    <div class="row text-center py-1 bold">
+      <span class="w-10 px-1">지역</span>
+      <span class="w-50 px-1">공고제목/기업명</span>
+      <span class="w-10 px-1">경력</span>
+      <span class="w-15 px-1">학력</span>
+      <span class="w-15 px-1">마감일</span>
+    </div>
+    <div class="row text-center py-1" th:if="${responseDto.dtoList == null}">
+      <span class="w-100 px-1 word-break">등록된 공고가 없습니다.</span>
+    </div>
+    <div class="row text-center py-1" th:each="dto:${responseDto.dtoList}">
+      <span class="w-10 px-1 word-break">[[${dto.sigunguNames[0]}]]</span>
+
+    </div>
+  </div><!--end of job list container-->
+
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </div>
 <script layout:fragment="script" th:inline="javascript">
@@ -184,6 +137,7 @@
   function sigunguList(sidoName) {
     axios.get(`/job/sigunguList?sidoName=${sidoName}`)
             .then(response => {
+              console.log(response.data);
               const sigunguBox = document.getElementById("sigungu-box");
               const sigunguList = response.data;
               sigunguBox.innerHTML = '';
@@ -443,42 +397,6 @@
    */
   function resetPageNum() {
     document.getElementById("page").value = 1;
-  }
-
-
-  /**
-   * AJAX 통신으로 검색 결과를 받아 #template에 표시한다.
-   */
-  function search() {
-    const page = document.getElementById("page").value;
-    const size = document.getElementById("size").value;
-    const location = document.getElementById("location").value;
-    const keyword = document.getElementById("keyword").value;
-    const closed = document.getElementById("closed").checked;
-    const sortType = document.getElementById("sortType").value;
-
-    axios.get("/job/searchResult", {
-      params: {
-        page: page,
-        size: size,
-        location: location,
-        keyword: keyword,
-        closed: closed,
-        sortType: sortType
-      }
-    })
-            .then(function (response) {
-              document.getElementById("template").innerHTML = response.data;
-
-              // 마감일 계산을 위한 script 실행
-              const scripts = document.getElementById("template").getElementsByTagName("script");
-              for (let i = 0; i < scripts.length; i++) {
-                eval(scripts[i].innerText || scripts[i].textContent);
-              }
-            })
-            .catch(function (error) {
-              console.error(error);
-            })
   }
 
 </script>

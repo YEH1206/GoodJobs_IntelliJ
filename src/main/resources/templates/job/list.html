@@ -32,45 +32,45 @@
   <div id="template">
     <div>
       <div class="row sp-between">
-    <span class="dark-grey">총 [[${responseDto.total}]]건</span>
-    <div class="row">
-      <div>
-        <input
-                id="visible"
-                class="visible"
-                type="checkbox"
-                th:checked="${requestDto.closed}"
-        />
-        <label class="ml-quarter mr-1" for="visible" >마감된 공고 포함</label>
-      </div>
-      <div class="relative mr-1" id="sort-box">
+        <span class="dark-grey">총 [[${responseDto.total}]]건</span>
         <div class="row">
+          <div>
+            <input
+                    id="visible"
+                    class="visible"
+                    type="checkbox"
+                    th:checked="${requestDto.closed}"
+            />
+            <label class="ml-quarter mr-1" for="visible" >마감된 공고 포함</label>
+          </div>
+          <div class="relative mr-1" id="sort-box">
+            <div class="row">
           <span class="grey-border w-100 py-half" id="sortBtn"
                 th:text="${requestDto.sortType == 'no' ? '최신등록순' : '마감임박순'}"></span >
-          <i class="fa-solid fa-caret-down" id="sortDropdownBtn"></i>
+              <i class="fa-solid fa-caret-down" id="sortDropdownBtn"></i>
+            </div>
+            <div class="py-half grey-border hidden" id="sort-option-box">
+              <ul class="px-3quarter">
+                <li class="sort-option" data-text="no">최신등록순</li>
+                <li class="sort-option" data-text="deadline">마감임박순</li>
+              </ul>
+            </div>
+          </div>
+          <div class="relative" id="size-box">
+            <div class="row">
+              <span class="grey-border w-100 py-half" id="sizeBtn">20개씩</span >
+              <i class="fa-solid fa-caret-down" id="sizeDropdownBtn"></i>
+            </div>
+            <div class="py-half grey-border hidden" id="size-option-box">
+              <ul class="px-3quarter">
+                <li class="size-option" data-num=20>20개씩</li>
+                <li class="size-option" data-num=30>30개씩</li>
+                <li class="size-option" data-num=40>40개씩</li>
+                <li class="size-option" data-num=50>50개씩</li>
+              </ul>
+            </div>
+          </div>
         </div>
-        <div class="py-half grey-border hidden" id="sort-option-box">
-          <ul class="px-3quarter">
-            <li class="sort-option" data-text="no">최신등록순</li>
-            <li class="sort-option" data-text="deadline">마감임박순</li>
-          </ul>
-        </div>
-      </div>
-      <div class="relative" id="size-box">
-        <div class="row">
-          <span class="grey-border w-100 py-half" id="sizeBtn">20개씩</span >
-          <i class="fa-solid fa-caret-down" id="sizeDropdownBtn"></i>
-        </div>
-        <div class="py-half grey-border hidden" id="size-option-box">
-          <ul class="px-3quarter">
-            <li class="size-option" data-num=20>20개씩</li>
-            <li class="size-option" data-num=30>30개씩</li>
-            <li class="size-option" data-num=40>40개씩</li>
-            <li class="size-option" data-num=50>50개씩</li>
-          </ul>
-        </div>
-      </div>
-    </div>
       </div><!--end of sortType-->
       <div class="py-1 mb-3" id="job-list-container">
         <div class="row text-center py-1 bold">

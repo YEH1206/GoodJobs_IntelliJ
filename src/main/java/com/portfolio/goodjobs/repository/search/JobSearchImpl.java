@@ -6,6 +6,7 @@ import com.portfolio.goodjobs.domain.QJob;
 import com.portfolio.goodjobs.domain.QJobLocation;
 import com.portfolio.goodjobs.dto.JobListDto;
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.QueryResults;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
@@ -26,7 +27,7 @@ import java.util.stream.Collectors;
 
 public class JobSearchImpl extends QuerydslRepositorySupport implements JobSearch {
 
-    public JobSearchImpl(JPAQueryFactory queryFactory) {
+    public JobSearchImpl() {
         super(Job.class);
     }
 
@@ -36,8 +37,9 @@ public class JobSearchImpl extends QuerydslRepositorySupport implements JobSearc
         QJob job = QJob.job;
         QJobLocation jobLocation = QJobLocation.jobLocation;
 
-        JPQLQuery<Job> jobJPQLQuery = from(job);
-        jobJPQLQuery.leftJoin(jobLocation).on(jobLocation.job.eq(job));
+        JPQLQuery<Job> jobJPQLQuery = from(job)
+                .leftJoin(job.locationSet, jobLocation)
+                .groupBy(job.no);
         BooleanBuilder booleanBuilder = new BooleanBuilder();
 
         // 지역별 검색
@@ -65,12 +67,12 @@ public class JobSearchImpl extends QuerydslRepositorySupport implements JobSearc
 
         jobJPQLQuery.where(booleanBuilder);
 
-        Objects.requireNonNull(getQuerydsl()).applyPagination(pageable, jobJPQLQuery);
+        Objects.requireNonNull(this.getQuerydsl()).applyPagination(pageable, jobJPQLQuery);
 
-        List<Job> jobList = jobJPQLQuery.fetch();
+        List<Job> list = jobJPQLQuery.fetch();
 
-        long totalCount = jobJPQLQuery.fetchCount();
+        long count = jobJPQLQuery.fetchCount();
 
-        return new PageImpl<>(jobList, pageable, totalCount);
+        return new PageImpl<>(list, pageable, count);
     }
 }

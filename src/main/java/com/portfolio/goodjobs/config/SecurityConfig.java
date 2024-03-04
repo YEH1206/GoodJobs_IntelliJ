@@ -33,10 +33,8 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/assets/**", "/css/**", "/js/**").permitAll()     // 정적 자원 요청 허용
-                        .requestMatchers("/member/**", "/job/list").permitAll()
                         .requestMatchers("/job/register").hasRole("CORPORATE")
-                        .anyRequest().authenticated())      // 로그인 성공하면 기존 요청 페이지로 리다이렉트
+                        .anyRequest().permitAll())      // 로그인 성공하면 기존 요청 페이지로 리다이렉트
                 .formLogin(form -> form
                         .loginPage("/member/login")
                         .defaultSuccessUrl("/job/list")    // 로그인 성공 후 이동할 페이지 경로
