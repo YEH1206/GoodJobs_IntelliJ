@@ -1,19 +1,10 @@
 package com.portfolio.goodjobs.repository.search;
 
 import com.portfolio.goodjobs.domain.Job;
-import com.portfolio.goodjobs.domain.JobLocation;
 import com.portfolio.goodjobs.domain.QJob;
 import com.portfolio.goodjobs.domain.QJobLocation;
-import com.portfolio.goodjobs.dto.JobListDto;
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.QueryResults;
-import com.querydsl.core.Tuple;
-import com.querydsl.core.types.Predicate;
-import com.querydsl.core.types.Projections;
-import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPQLQuery;
-import com.querydsl.jpa.impl.JPAQuery;
-import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -22,8 +13,6 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class JobSearchImpl extends QuerydslRepositorySupport implements JobSearch {
 
@@ -51,19 +40,21 @@ public class JobSearchImpl extends QuerydslRepositorySupport implements JobSearc
         if (keyword != null && !keyword.isEmpty()) {
             String[] keywords = keyword.split("\\s+");
 
+            // 키워드 검색용 boolean 생성
             BooleanBuilder keywordBoolean = new BooleanBuilder();
 
             for (String kw : keywords) {
-                keywordBoolean.or(
-                        job.title.containsIgnoreCase(kw)
+                keywordBoolean.or(      // 공백으로 구분된 키워드를 or로 연결
+                        job.title.containsIgnoreCase(kw)        // 키워드 검색 범위: 제목 or 회사명 or 상세내용
                                 .or(job.companyName.containsIgnoreCase(kw))
                                 .or(job.detail.containsIgnoreCase(kw)));
             }
 
+            // 키워드 검색 결과를 기존의 boolean과 and로 연결
             booleanBuilder.and(keywordBoolean);
         }
 
-        // 채용중인 공고 검색
+        // 현재 채용중인 공고만 검색
         if (!closed) {
             LocalDateTime current = LocalDateTime.now(zoneId);
             booleanBuilder.and(job.deadline.after(current));

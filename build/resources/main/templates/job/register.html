@@ -7,7 +7,7 @@
 </head>
 <div layout:fragment="content">
   <h1>채용공고 등록하기</h1>
-  <form action="/job/register" id="registerForm" method="post">
+  <form action="/job/register" id="registerForm" method="post" th:object="${jobDto}">
     <div class="row px-3 py-2 grey-border mb-3 sp-evenly" id="companyInfoBox">
       <div id="logo-box" class="relative vh-center">
         <div id="logo-file-name"></div>
@@ -70,6 +70,7 @@
               name="title"
               placeholder="제목을 입력해주세요."
               type="text"
+              th:field="*{title}"
         />
       </div>
       <div class="mx-1"><div class="error-msg title"></div></div>
@@ -278,7 +279,7 @@
 
 
   /**
-   * 로고 이미지는 AJAX 방식으로 서버 임시폴더에 업로드한다.
+   * 로고 이미지는 AJAX 방식으로 업로드한다.
    */
 
   logoBtn.addEventListener("change", function () {
@@ -718,7 +719,6 @@
       input.type = "hidden";
       input.name = `locations[${i}]`
       input.value = list[i];
-      console.log(input)
 
       listDiv.appendChild(input);
     }
@@ -765,6 +765,7 @@
 
     // 회사 주소 저장
     totalAddress();
+    console.log(document.getElementById("address").value)
 
     // 근무지역 바인딩 처리
     bindingLocations();
@@ -803,7 +804,6 @@
   /**
   리다이렉트 된 에러 메시지를 errorBox에 삽입해 보여주거나 alert로 띄운다.
   */
-  console.log(errors)
   if (errors) {
     for (const error of errors) {
       let field = error.field;
@@ -819,11 +819,9 @@
           defaultMsg = "마감일을 설정해주세요.";
         }
       }
-
       // 각각의 에러 메시지를 표시한다.
       showErrorMsg(field, defaultMsg);
     }
-
     // 첫번째 에러가 발생한 곳으로 스크롤한다.
     scrollToErrorBox(errors[0]["field"])
   }

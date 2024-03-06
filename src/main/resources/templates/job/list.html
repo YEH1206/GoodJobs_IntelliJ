@@ -58,7 +58,7 @@
           </div>
           <div class="relative" id="size-box">
             <div class="row">
-              <span class="grey-border w-100 py-half" id="sizeBtn">20개씩</span >
+              <span class="grey-border w-100 py-half" id="sizeBtn">[[${responseDto.size}]]개씩</span >
               <i class="fa-solid fa-caret-down" id="sizeDropdownBtn"></i>
             </div>
             <div class="py-half grey-border hidden" id="size-option-box">
@@ -74,8 +74,8 @@
       </div><!--end of sortType-->
       <div class="py-1 mb-3" id="job-list-container">
         <div class="row text-center py-1 bold">
-          <span class="w-10 px-1">지역</span>
-          <span class="w-50 px-1">공고제목/기업명</span>
+          <span class="w-15 px-1">지역</span>
+          <span class="w-45 px-1">공고제목/기업명</span>
           <span class="w-10 px-1">경력</span>
           <span class="w-15 px-1">학력</span>
           <span class="w-15 px-1">마감일</span>
@@ -84,10 +84,14 @@
           <span class="w-100 px-1 word-break">등록된 공고가 없습니다.</span>
         </div>
         <div class="row text-center py-1" th:each="dto:${responseDto.dtoList}">
-          <span class="w-10 px-1 word-break">[[${dto.sigunguNames[0]}]]</span>
-          <div class="w-50 text-left col px-1">
-            <span class="medium-large">[[${dto.title}]]</span>
-            <span class="pt-half grey">[[${dto.companyName}]]</span>
+          <div class="col w-15 px-1 word-break">
+            <span >[[${dto.sigunguNames[0]}]]</span>
+            <span class="mt-half small another-location mx-3quarter"
+                  th:if="${#lists.size(dto.sigunguNames) > 1}">+ [[${#lists.size(dto.sigunguNames) - 1}]]개 지역</span>
+          </div>
+          <div class="w-45 text-left col px-1">
+            <span class="medium-large bold">[[${dto.title}]]</span>
+            <span class="pt-half dark-grey">[[${dto.companyName}]]</span>
           </div>
           <div class="w-10 px-1">
             <div class="col">
@@ -107,6 +111,7 @@
           <div class="w-15 px-1 col">
             <div class="mb-half"><span class="bold small" th:id="'isClosed_' + ${dto.no}"></span></div>
             <span th:id="'deadline_' + ${dto.no}"></span>
+            <span>[[${dto.deadline}]]</span>
           </div>
           <script th:inline="javascript" th:src="@{/js/deadline.js}"></script>
           <script th:inline="javascript">

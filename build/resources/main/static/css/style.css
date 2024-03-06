@@ -124,6 +124,10 @@ h1 {
     width: 40%;
 }
 
+.w-45 {
+    width: 45%;
+}
+
 .w-50 {
     width: 50%;
 }
@@ -197,6 +201,10 @@ h1 {
 
 .m-half {
     margin: 8px;
+}
+
+.mt-half {
+    margin-top: 8px;
 }
 
 .mt-1 {
@@ -321,6 +329,11 @@ h1 {
 .mx-1 {
     margin-left: 16px;
     margin-right: 16px;
+}
+
+.mx-1-quarter {
+    margin-left: 20px;
+    margin-right: 20px;
 }
 
 .mx-2 {
@@ -1008,4 +1021,11 @@ h1 {
 .active {
     color: #ff501b;
     font-weight: bold;
+}
+
+.another-location {
+    border: 1px solid #99ccff;
+    padding: 2px 4px;
+    border-radius: calc(1rem + 4px);
+    background-color: #99ccff;
 }

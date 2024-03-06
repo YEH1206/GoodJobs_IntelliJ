@@ -1,5 +1,6 @@
 package com.portfolio.goodjobs.domain;
 
+import com.portfolio.goodjobs.enums.MemberRole;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;

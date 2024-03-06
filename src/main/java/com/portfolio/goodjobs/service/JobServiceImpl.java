@@ -58,8 +58,13 @@ public class JobServiceImpl implements JobService {
     @Transactional
     public PageResponseDto<JobListDto> jobList(PageRequestDto pageRequestDto) {
 
+        // 검색할 근무지역 리스트
         String[] locations = pageRequestDto.getLocations();
+
+        // 검색어
         String keyword = pageRequestDto.getKeyword();
+
+        // 마감된 공고 검색 여부
         boolean closed = pageRequestDto.isClosed();
         Pageable pageable = pageRequestDto.getPageable();
 

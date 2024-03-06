@@ -35,7 +35,7 @@ public class JobDto implements BaseDto {
     @Size(max = 30, message = "회사명이 유효하지 않습니다.")
     private String companyName;         // 회사명
 
-    @NotEmpty(message = "회사 주소를 입력해주세요.")
+    @NotBlank(message = "회사 주소를 입력해주세요.")
     @Size(max = 100, message = "회사 주소는 100글자 이내로 작성해주세요.")
     private String address;             // 회사 주소
 

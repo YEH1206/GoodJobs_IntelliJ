@@ -34,18 +34,22 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/job/register").hasRole("CORPORATE")
-                        .anyRequest().permitAll())      // 로그인 성공하면 기존 요청 페이지로 리다이렉트
+                        .anyRequest().permitAll())
+
+                .exceptionHandling(exceptionHandling -> exceptionHandling
+                        .accessDeniedHandler(new CustomAccessDeniedHandler()))
+
                 .formLogin(form -> form
                         .loginPage("/member/login")
                         .defaultSuccessUrl("/job/list")    // 로그인 성공 후 이동할 페이지 경로
                         .permitAll()
                 )
+
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .invalidateHttpSession(true)
                         .permitAll())
-                .exceptionHandling(exceptionHandling -> exceptionHandling
-                        .accessDeniedHandler(new CustomAccessDeniedHandler()))
+
                 .csrf(AbstractHttpConfigurer::disable);
 
         return http.build();
@@ -55,14 +59,15 @@ public class SecurityConfig {
     public static class CustomAccessDeniedHandler implements AccessDeniedHandler {
 
         @Override
-        public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
+        public void handle(HttpServletRequest request, HttpServletResponse response,
+                           AccessDeniedException accessDeniedException) throws IOException {
 
             String  referer = request.getHeader("Referer");
 
             if(referer != null && !referer.isEmpty()) {
                 response.sendRedirect(referer);         // 접근 거부되면 기존 페이지로 리다이렉트
             } else {
-                response.sendRedirect("/member/login");
+                response.sendRedirect("/job/list");     // 또는 채용공고 목록으로 리다이렉트
             }
         }
     }

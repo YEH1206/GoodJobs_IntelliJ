@@ -36,7 +36,7 @@ public class JobController {
     private final JobService jobService;
 
     @GetMapping("/register")
-    public void registerGET(PageRequestDto pageRequestDto, Model model, RedirectAttributes redirectAttributes) {
+    public void registerGET(PageRequestDto pageRequestDto, @ModelAttribute JobDto jobDto, Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String id = authentication.getName();
 
@@ -46,15 +46,19 @@ public class JobController {
         model.addAttribute("companyName", corporateInfoDto.getCompanyName());
         model.addAttribute("sidoList", Sido.values());
         model.addAttribute("requestDto", pageRequestDto);
+        model.addAttribute("jobDto", jobDto);
     }
 
     @PostMapping("/register")
-    public String registerPOST(@Valid JobDto jobDto, BindingResult bindingResult,
+    public String registerPOST(@ModelAttribute @Valid JobDto jobDto, BindingResult bindingResult,
                                RedirectAttributes redirectAttributes) {
-        log.info(jobDto.toString());
+
+        System.out.println("register test...........");
+        System.out.println(jobDto);
 
         if(bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
+            redirectAttributes.addFlashAttribute("jobDto", jobDto);
             return "redirect:/job/register";
         }
 
@@ -68,7 +72,6 @@ public class JobController {
     @GetMapping("read")
     public String readOne(Long no, PageRequestDto pageRequestDto, Model model) {
         JobDto jobDto = jobService.readOne(no);
-        System.out.println(jobDto);
         model.addAttribute("dto", jobDto);
         return null;
     }
@@ -76,9 +79,6 @@ public class JobController {
     @GetMapping("/list")
     public void list(PageRequestDto pageRequestDto, Model model) {
         PageResponseDto<JobListDto> responseDto = jobService.jobList(pageRequestDto);
-        log.info("list test......");
-        log.info(pageRequestDto);
-        log.info(responseDto.toString());
         model.addAttribute("sidoList", Sido.values());
         model.addAttribute("requestDto", pageRequestDto);
         model.addAttribute("responseDto", responseDto);
@@ -86,9 +86,7 @@ public class JobController {
 
     @GetMapping("/searchResult")
     public void search(PageRequestDto pageRequestDto, Model model) {
-        System.out.println(pageRequestDto);
         PageResponseDto<JobListDto> responseDto = jobService.jobList(pageRequestDto);
-        model.addAttribute("sidoList", Sido.values());
         model.addAttribute("requestDto", pageRequestDto);
         model.addAttribute("responseDto", responseDto);
     }

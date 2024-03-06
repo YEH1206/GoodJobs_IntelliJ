@@ -24,7 +24,7 @@
 </head>
 <body>
 <div id="header-container">
-  <div class="header-row sp-between resolution-65">
+  <div class="header-row sp-between resolution-65 px-2">
     <div class="row">
       <a th:href="@{/job/list}"><img th:src="@{/assets/main-logo.png}" alt="굿잡스 로고" /></a>
       <div class="ml-2" id="search-container">
@@ -59,7 +59,7 @@
       <a th:if="${#authorization.expression('isAuthenticated()')}" href="/logout" class="header-grey">로그아웃</a>
     </div>
   </div>
-  <div class="header-row resolution-65">
+  <div class="header-row resolution-65 px-2">
     <a th:href="@{/job/list}" id="first-menu">채용정보</a>
     <div class="drop-btn" th:unless="${#authorization.expression('isAuthenticated()')}">
       <button type="button" class="menu subnav-btn">회원서비스</button>
@@ -108,7 +108,7 @@
   </div>
 </div>
 <div id="section-container">
-  <div class="resolution-65 pt-2">
+  <div class="resolution-65 pt-2 px-2">
     <div layout:fragment="content">
 
     </div>

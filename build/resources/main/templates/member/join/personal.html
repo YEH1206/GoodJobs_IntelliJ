@@ -10,14 +10,15 @@
     <div class="w-60">
       <h1>개인 회원가입</h1>
       <div id="form-container" class="white-background px-2 py-3 mb-5">
-        <form action="/member/join/personal" method="post" id="join-form">
+        <form action="/member/join/personal" method="post" id="join-form" th:object="${memberDto}">
           <div class="row mb-2">
             <div class="w-30"><label for="id">아이디<span class="red-star"> *</span></label></div>
             <div class="col w-70">
               <div class="flex sp-between">
-                <input type="text" id="id" name="id" class="w-75 mr-half" placeholder="아이디">
+                <input type="text" id="id" name="id" class="w-75 mr-half" placeholder="아이디"
+                       th:field="*{id}">
                 <input type="button" id="checkId" value="중복확인" class="w-25">
-                <input type="hidden" id="validId" name="validId">
+                <input type="hidden" id="validId" name="validId" value=false>
               </div>
               <div class="error-msg id"></div>
             </div>
@@ -36,7 +37,8 @@
             <div class="w-30"><label for="email">이메일<span class="red-star"> *</span></label></div>
             <div class="col w-70">
               <div class="flex w-100">
-                <input type="text" id="email" name="email" class="w-100" placeholder="example@email.com">
+                <input type="text" id="email" name="email" class="w-100" placeholder="example@email.com"
+                       th:field="*{email}">
               </div>
               <div class="error-msg email"></div>
             </div>
@@ -161,5 +163,14 @@
 
     document.getElementById('join-form').submit();
   })
+
+
+  /**
+   * 리다이렉트 된 에러 메시지를 alert로 띄운다.
+   */
+  const errors = [[${errors}]];
+  if (errors) {
+    alert(errors[0].defaultMessage);
+  }
 
 </script>

@@ -5,11 +5,11 @@
       <div>
         <input
                 id="visible"
+                class="visible"
                 type="checkbox"
-                name="closed"
                 th:checked="${requestDto.closed}"
         />
-        <label class="ml-quarter mr-1" for="visible">마감된 공고 포함</label>
+        <label class="ml-quarter mr-1" for="visible" >마감된 공고 포함</label>
       </div>
       <div class="relative mr-1" id="sort-box">
         <div class="row">
@@ -25,9 +25,8 @@
         </div>
       </div>
       <div class="relative" id="size-box">
-        <input type="hidden" id="size" name="size">
         <div class="row">
-          <span class="grey-border w-100 py-half" id="sizeBtn">20개씩</span >
+          <span class="grey-border w-100 py-half" id="sizeBtn">[[${responseDto.size}]]개씩</span >
           <i class="fa-solid fa-caret-down" id="sizeDropdownBtn"></i>
         </div>
         <div class="py-half grey-border hidden" id="size-option-box">
@@ -43,8 +42,8 @@
   </div><!--end of sortType-->
   <div class="py-1 mb-3" id="job-list-container">
     <div class="row text-center py-1 bold">
-      <span class="w-10 px-1">지역</span>
-      <span class="w-50 px-1">공고제목/기업명</span>
+      <span class="w-15 px-1">지역</span>
+      <span class="w-45 px-1">공고제목/기업명</span>
       <span class="w-10 px-1">경력</span>
       <span class="w-15 px-1">학력</span>
       <span class="w-15 px-1">마감일</span>
@@ -53,10 +52,14 @@
       <span class="w-100 px-1 word-break">등록된 공고가 없습니다.</span>
     </div>
     <div class="row text-center py-1" th:each="dto:${responseDto.dtoList}">
-      <span class="w-10 px-1 word-break">[[${dto.sigunguNames[0]}]]</span>
-      <div class="w-50 text-left col px-1">
-        <span class="medium-large">[[${dto.title}]]</span>
-        <span class="pt-half grey">[[${dto.companyName}]]</span>
+      <div class="col w-15 px-1 word-break">
+        <span >[[${dto.sigunguNames[0]}]]</span>
+        <span class="mt-half small another-location mx-1"
+              th:if="${#lists.size(dto.sigunguNames) > 1}">+ [[${#lists.size(dto.sigunguNames) - 1}]]개 지역</span>
+      </div>
+      <div class="w-45 text-left col px-1">
+        <span class="medium-large bold">[[${dto.title}]]</span>
+        <span class="pt-half dark-grey">[[${dto.companyName}]]</span>
       </div>
       <div class="w-10 px-1">
         <div class="col">
@@ -84,17 +87,17 @@
     </div>
   </div><!--end of job list container-->
   <div id="pagination" class="row h-center mb-5">
-    <span class="p-half m-half prevNext pointer pageBtn" th:if="${responseDto.prev}"
-          th:data-num="${responseDto.page - 5 < 1 ? 1 : responseDto.page - 5}">
-      <i class="fa-solid fa-chevron-left"></i>
-    </span>
+        <span class="p-half m-half prevNext pointer pageBtn" th:if="${responseDto.prev}"
+              th:data-num="${responseDto.page - 5 < 1 ? 1 : responseDto.page - 5}">
+          <i class="fa-solid fa-chevron-left"></i>
+        </span>
     <th:block th:each="i:${#numbers.sequence(responseDto.start, responseDto.end)}">
-      <span
-              th:if="${i > 0}"
-              th:class="${responseDto.page == i} ?
+          <span
+                  th:if="${i > 0}"
+                  th:class="${responseDto.page == i} ?
               'p-half m-half pointer pageBtn active' : 'p-half m-half pointer pageBtn'"
-              th:data-num="${i}">[[${i}]]
-      </span>
+                  th:data-num="${i}">[[${i}]]
+          </span>
       <span th:unless="${i > 0}" class="'p-half m-half pointer pageBtn active" data-num="1">1</span>
     </th:block>
     <span class="p-half m-half prevNext pointer pageBtn" th:if="${responseDto.next}"

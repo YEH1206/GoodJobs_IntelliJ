@@ -1,7 +1,7 @@
 package com.portfolio.goodjobs.service;
 
 import com.portfolio.goodjobs.domain.Member;
-import com.portfolio.goodjobs.domain.MemberRole;
+import com.portfolio.goodjobs.enums.MemberRole;
 import com.portfolio.goodjobs.dto.MemberDto;
 import com.portfolio.goodjobs.exception.IdDuplicateException;
 import com.portfolio.goodjobs.repository.MemberRepository;
@@ -33,7 +33,7 @@ public class MemberServiceImpl implements MemberService {
 
         Optional<Member> result = memberRepository.findById(username);
 
-        return result.orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
+        return result.orElseThrow(() -> new UsernameNotFoundException("존재하지 않는 회원: " + username));
     }
 
     @Override

@@ -46,7 +46,7 @@ public class QCorporateInfo extends EntityPathBase<CorporateInfo> {
     public final NumberPath<Long> regNum = createNumber("regNum", Long.class);
 
     //inherited
-    public final EnumPath<MemberRole> role = _super.role;
+    public final EnumPath<com.portfolio.goodjobs.enums.MemberRole> role = _super.role;
 
     public QCorporateInfo(String variable) {
         super(CorporateInfo.class, forVariable(variable));

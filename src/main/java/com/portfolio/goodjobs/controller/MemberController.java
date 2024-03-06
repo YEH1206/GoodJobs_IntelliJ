@@ -4,6 +4,7 @@ import com.portfolio.goodjobs.dto.*;
 import com.portfolio.goodjobs.exception.IdDuplicateException;
 import com.portfolio.goodjobs.service.CorporateInfoService;
 import com.portfolio.goodjobs.service.MemberService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,10 +12,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -44,17 +43,27 @@ public class MemberController {
     }
 
     @GetMapping("/join/personal")
-    public void joinPersonalGET(PageRequestDto pageRequestDto, Model model) {
+    public void joinPersonalGET(PageRequestDto pageRequestDto,
+                                @ModelAttribute MemberDto memberDto, Model model) {
+        model.addAttribute("memberDto", memberDto);
         model.addAttribute("requestDto", pageRequestDto);
     }
 
     @PostMapping("/join/personal")
-    public String joinPersonalPOST(MemberDto memberDto, RedirectAttributes redirectAttributes) {
+    public String joinPersonalPOST(@ModelAttribute @Valid MemberDto memberDto,
+                                   BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+
+        if(bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
+            redirectAttributes.addFlashAttribute("memberDto", memberDto);
+            return "redirect:/member/join/personal";
+        }
 
         try {
             memberService.join(memberDto);
         } catch (IdDuplicateException e) {
             redirectAttributes.addFlashAttribute("error", "id");
+            redirectAttributes.addFlashAttribute("memberDto", memberDto);
             return "redirect:/member/join/personal";
         }
 
@@ -63,16 +72,27 @@ public class MemberController {
     }
 
     @GetMapping("/join/corporate")
-    public void joinCorporateGET(PageRequestDto pageRequestDto, Model model) {
+    public void joinCorporateGET(PageRequestDto pageRequestDto,
+                                 @ModelAttribute CorporateInfoDto corporateInfoDto, Model model) {
+        model.addAttribute("corporateInfoDto", corporateInfoDto);
         model.addAttribute("requestDto", pageRequestDto);
     }
 
     @PostMapping("/join/corporate")
-    public String joinCorporatePOST(CorporateInfoDto corporateInfoDto, RedirectAttributes redirectAttributes) {
+    public String joinCorporatePOST(@ModelAttribute @Valid CorporateInfoDto corporateInfoDto,
+                                    BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+
+        if(bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
+            redirectAttributes.addFlashAttribute("corporateInfoDto", corporateInfoDto);
+            return "redirect:/member/join/corporate";
+        }
+
         try {
             corporateInfoService.join(corporateInfoDto);
         } catch (IdDuplicateException e) {
             redirectAttributes.addFlashAttribute("error", "id");
+            redirectAttributes.addFlashAttribute("corporateInfoDto", corporateInfoDto);
             return "redirect:/member/join/corporate";
         }
 

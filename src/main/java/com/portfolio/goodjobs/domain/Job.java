@@ -1,13 +1,10 @@
 package com.portfolio.goodjobs.domain;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Future;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.BatchSize;
-import org.springframework.cglib.core.Local;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;

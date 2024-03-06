@@ -35,7 +35,7 @@ public class UpDownController {
     @Value("${com.portfolio.goodjobs.temp.path}")
     private String tempPath;
 
-    @Operation(summary = "전송된 파일을 임시 폴더에 저장한다.")
+    @Operation(summary = "전송된 파일을 저장한다.")
     @PostMapping(value = "/files", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<List<UploadResultDto>> upload(@RequestBody UploadFileDto uploadFileDto) {
 
@@ -71,7 +71,7 @@ public class UpDownController {
                         g2d.setColor(new Color(0, 0, 0, 0));
                         g2d.fillRect(0, 0, thumbnailSize, thumbnailSize);
 
-                        // 이미지가 정가운데에 위치하도록 설정한다.
+                        // 로고 이미지가 정가운데에 위치하도록 설정한다.
                         int x = Math.max((thumbnailSize - originalWidth) / 2, 0);
                         int y = Math.max((thumbnailSize - originalHeight) / 2, 0);
                         g2d.drawImage(originalThumbnail, x, y, originalWidth, originalHeight, null);
@@ -95,7 +95,7 @@ public class UpDownController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
-    @Operation(summary = "첨부파일을 임시 폴더에서 조회한다.")
+    @Operation(summary = "저장된 첨부파일을 조회한다.")
     @GetMapping("/files/{fileName}")
     public ResponseEntity<Resource> viewFileGET(@PathVariable String fileName) {
 
@@ -110,7 +110,7 @@ public class UpDownController {
         return ResponseEntity.ok().headers(headers).body(resource);
     }
 
-    @Operation(summary = "첨부파일을 임시 폴더에서 삭제한다.")
+    @Operation(summary = "저장된 첨부파일을 삭제한다.")
     @DeleteMapping("/files/{fileName}")
     public Map<String, Boolean> removeFile(@PathVariable String fileName) {
 

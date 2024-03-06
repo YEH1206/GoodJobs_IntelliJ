@@ -1,7 +1,7 @@
 package com.portfolio.goodjobs.service;
 
 import com.portfolio.goodjobs.domain.CorporateInfo;
-import com.portfolio.goodjobs.domain.MemberRole;
+import com.portfolio.goodjobs.enums.MemberRole;
 import com.portfolio.goodjobs.dto.CorporateInfoDto;
 import com.portfolio.goodjobs.exception.IdDuplicateException;
 import com.portfolio.goodjobs.repository.CorporateInfoRepository;

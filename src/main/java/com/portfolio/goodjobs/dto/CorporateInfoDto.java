@@ -3,6 +3,7 @@ package com.portfolio.goodjobs.dto;
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -29,7 +30,7 @@ public class CorporateInfoDto {
     @NotEmpty(message = "회사명을 입력해주세요.")
     private String companyName;
 
-    @NotEmpty(message = "사업자등록번호를 입력해주세요.")
+    @NotNull(message = "사업자등록번호를 입력해주세요.")
     private Long regNum;
 
     @AssertTrue(message = "사업자 인증이 필요합니다.")

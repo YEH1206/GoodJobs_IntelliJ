@@ -35,7 +35,7 @@ public class QMember extends EntityPathBase<Member> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> regDate = _super.regDate;
 
-    public final EnumPath<MemberRole> role = createEnum("role", MemberRole.class);
+    public final EnumPath<com.portfolio.goodjobs.enums.MemberRole> role = createEnum("role", com.portfolio.goodjobs.enums.MemberRole.class);
 
     public QMember(String variable) {
         super(Member.class, forVariable(variable));

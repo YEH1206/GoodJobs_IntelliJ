@@ -1,4 +1,4 @@
-package com.portfolio.goodjobs.domain;
+package com.portfolio.goodjobs.enums;
 
 public enum MemberRole {
 
